@@ -10,7 +10,16 @@ class LyricNotifier extends _$LyricNotifier {
   AsyncValue<SongLyric?> build() => const AsyncValue.data(null);
 
   Future<void> transcribe(String youtubeURL) async {
-    if (youtubeURL.trim().isEmpty) return;
+    if (youtubeURL.trim().isEmpty) {
+      state = AsyncValue.error("URL cannot be empty", StackTrace.current);
+      return;
+    }
+
+    final isYoutube = youtubeURL.contains("youtube.com") || youtubeURL.contains("youtu.be");
+    if (!isYoutube) {
+      state = AsyncValue.error("Url must be a youtube link", StackTrace.current);
+      return;
+    }
 
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => ref.read(lyricRepositoryProvider).getLyric(youtubeURL));

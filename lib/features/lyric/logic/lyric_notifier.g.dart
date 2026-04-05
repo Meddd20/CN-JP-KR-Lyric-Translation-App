@@ -15,15 +15,15 @@ final lyricProvider = LyricNotifierProvider._();
 final class LyricNotifierProvider
     extends $NotifierProvider<LyricNotifier, AsyncValue<SongLyric?>> {
   LyricNotifierProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'lyricProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'lyricProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$lyricNotifierHash();
@@ -41,7 +41,7 @@ final class LyricNotifierProvider
   }
 }
 
-String _$lyricNotifierHash() => r'a5b6f42d5ecc3def3e9a8319aa6487ab9916f25b';
+String _$lyricNotifierHash() => r'2e31faffe88dc7f8c134565a608eacbd606e12dd';
 
 abstract class _$LyricNotifier extends $Notifier<AsyncValue<SongLyric?>> {
   AsyncValue<SongLyric?> build();
@@ -50,14 +50,11 @@ abstract class _$LyricNotifier extends $Notifier<AsyncValue<SongLyric?>> {
   void runBuild() {
     final ref =
         this.ref as $Ref<AsyncValue<SongLyric?>, AsyncValue<SongLyric?>>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<SongLyric?>, AsyncValue<SongLyric?>>,
-              AsyncValue<SongLyric?>,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<AsyncValue<SongLyric?>, AsyncValue<SongLyric?>>,
+        AsyncValue<SongLyric?>,
+        Object?,
+        Object?>;
     element.handleCreate(ref, build);
   }
 }

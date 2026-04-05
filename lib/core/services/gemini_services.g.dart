@@ -16,15 +16,15 @@ final class GeminiServiceProvider
     extends $FunctionalProvider<GeminiService, GeminiService, GeminiService>
     with $Provider<GeminiService> {
   GeminiServiceProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'geminiServiceProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'geminiServiceProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$geminiServiceHash();

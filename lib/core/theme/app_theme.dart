@@ -10,6 +10,7 @@ class AppColors {
   // Accent
   static const primary = Color(0xFFFF6B4A);
   static const secondary = Color(0xFF6C63FF);
+  static const tertiary = Color(0xFF9B59B6);
 
   // Language
   static const mandarin = Color(0xFFFF4444);
@@ -19,6 +20,11 @@ class AppColors {
   // Text
   static const textPrimary = Color(0xFFF0F0F0);
   static const textMuted = Color(0xFF6B6B80);
+
+  // Difficulty
+  static const difficultyBeginner = Color(0xFF27AE60);
+  static const difficultyIntermediate = Color(0xFFE67E22);
+  static const difficultyAdvanced = Color(0xFFE74C3C);
 }
 
 class AppTheme {
@@ -32,18 +38,25 @@ class AppTheme {
         surface: AppColors.surface,
         primary: AppColors.primary,
         secondary: AppColors.secondary,
+        tertiary: AppColors.tertiary,
       ),
       textTheme: GoogleFonts.interTextTheme(
         const TextTheme(
           displayLarge: TextStyle(
             color: AppColors.textPrimary,
-            fontSize: 32,
+            fontSize: 30,
             fontWeight: FontWeight.bold,
           ),
           titleLarge: TextStyle(
             color: AppColors.textPrimary,
             fontSize: 18,
             fontWeight: FontWeight.w600,
+          ),
+          labelLarge: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
           ),
           bodyMedium: TextStyle(
             color: AppColors.textPrimary,

@@ -6,10 +6,12 @@ part of 'meaning.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_Meaning _$MeaningFromJson(Map<String, dynamic> json) =>
-    _Meaning(id: json['id'] as String, en: json['en'] as String);
+_Meaning _$MeaningFromJson(Map<String, dynamic> json) => _Meaning(
+      id: json['id'] as String,
+      en: json['en'] as String,
+    );
 
 Map<String, dynamic> _$MeaningToJson(_Meaning instance) => <String, dynamic>{
-  'id': instance.id,
-  'en': instance.en,
-};
+      'id': instance.id,
+      'en': instance.en,
+    };

@@ -12,20 +12,18 @@ part of 'lyric_repository.dart';
 @ProviderFor(lyricRepository)
 final lyricRepositoryProvider = LyricRepositoryProvider._();
 
-final class LyricRepositoryProvider
-    extends
-        $FunctionalProvider<LyricRepository, LyricRepository, LyricRepository>
-    with $Provider<LyricRepository> {
+final class LyricRepositoryProvider extends $FunctionalProvider<LyricRepository,
+    LyricRepository, LyricRepository> with $Provider<LyricRepository> {
   LyricRepositoryProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'lyricRepositoryProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'lyricRepositoryProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$lyricRepositoryHash();

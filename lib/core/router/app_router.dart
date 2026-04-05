@@ -2,7 +2,7 @@ import 'package:cnjpkr_song_lyric_trnslt/core/router/main_shell.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/history_page.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/home_page.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/lyric_detail_page.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/vocabulary_page.dart';
+import 'package:cnjpkr_song_lyric_trnslt/features/vocabulary/vocabulary_page.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouter = GoRouter(
