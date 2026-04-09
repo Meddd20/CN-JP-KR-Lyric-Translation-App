@@ -9,13 +9,13 @@ part of 'chunk.dart';
 _Chunk _$ChunkFromJson(Map<String, dynamic> json) => _Chunk(
       surface: json['surface'] as String,
       reading: json['reading'] as String,
-      meaning: json['meaning'] as String,
-      isKeywoard: json['isKeywoard'] as bool,
+      meaning: Meaning.fromJson(json['meaning'] as Map<String, dynamic>),
+      isKeyword: json['isKeyword'] as bool,
     );
 
 Map<String, dynamic> _$ChunkToJson(_Chunk instance) => <String, dynamic>{
       'surface': instance.surface,
       'reading': instance.reading,
       'meaning': instance.meaning,
-      'isKeywoard': instance.isKeywoard,
+      'isKeyword': instance.isKeyword,
     };

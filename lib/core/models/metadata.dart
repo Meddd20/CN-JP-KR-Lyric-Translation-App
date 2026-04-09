@@ -7,7 +7,12 @@ part 'metadata.g.dart';
 
 @freezed
 abstract class Metadata with _$Metadata {
-  const factory Metadata({required String title, required String artist, required ScriptLanguage scriptLanguage, required Difficulty difficulty, required List<String> tags}) = _Metadata;
+  const factory Metadata(
+      {required String title,
+      required String artist,
+      required ScriptLanguage scriptLanguage,
+      required Difficulty difficulty,
+      required List<String> tags}) = _Metadata;
 
   factory Metadata.fromJson(Map<String, dynamic> json) => _$MetadataFromJson(json);
 }

@@ -14,6 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$SongLyric {
+  String get youtubeURL;
   Metadata get metadata;
   List<GlobalGlossary> get globalGlossary;
   List<Lyric> get lyrics;
@@ -33,6 +34,8 @@ mixin _$SongLyric {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is SongLyric &&
+            (identical(other.youtubeURL, youtubeURL) ||
+                other.youtubeURL == youtubeURL) &&
             (identical(other.metadata, metadata) ||
                 other.metadata == metadata) &&
             const DeepCollectionEquality()
@@ -44,13 +47,14 @@ mixin _$SongLyric {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      youtubeURL,
       metadata,
       const DeepCollectionEquality().hash(globalGlossary),
       const DeepCollectionEquality().hash(lyrics));
 
   @override
   String toString() {
-    return 'SongLyric(metadata: $metadata, globalGlossary: $globalGlossary, lyrics: $lyrics)';
+    return 'SongLyric(youtubeURL: $youtubeURL, metadata: $metadata, globalGlossary: $globalGlossary, lyrics: $lyrics)';
   }
 }
 
@@ -60,7 +64,8 @@ abstract mixin class $SongLyricCopyWith<$Res> {
       _$SongLyricCopyWithImpl;
   @useResult
   $Res call(
-      {Metadata metadata,
+      {String youtubeURL,
+      Metadata metadata,
       List<GlobalGlossary> globalGlossary,
       List<Lyric> lyrics});
 
@@ -79,11 +84,16 @@ class _$SongLyricCopyWithImpl<$Res> implements $SongLyricCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? youtubeURL = null,
     Object? metadata = null,
     Object? globalGlossary = null,
     Object? lyrics = null,
   }) {
     return _then(_self.copyWith(
+      youtubeURL: null == youtubeURL
+          ? _self.youtubeURL
+          : youtubeURL // ignore: cast_nullable_to_non_nullable
+              as String,
       metadata: null == metadata
           ? _self.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -203,15 +213,16 @@ extension SongLyricPatterns on SongLyric {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(Metadata metadata, List<GlobalGlossary> globalGlossary,
-            List<Lyric> lyrics)?
+    TResult Function(String youtubeURL, Metadata metadata,
+            List<GlobalGlossary> globalGlossary, List<Lyric> lyrics)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _SongLyric() when $default != null:
-        return $default(_that.metadata, _that.globalGlossary, _that.lyrics);
+        return $default(_that.youtubeURL, _that.metadata, _that.globalGlossary,
+            _that.lyrics);
       case _:
         return orElse();
     }
@@ -232,14 +243,15 @@ extension SongLyricPatterns on SongLyric {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(Metadata metadata, List<GlobalGlossary> globalGlossary,
-            List<Lyric> lyrics)
+    TResult Function(String youtubeURL, Metadata metadata,
+            List<GlobalGlossary> globalGlossary, List<Lyric> lyrics)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SongLyric():
-        return $default(_that.metadata, _that.globalGlossary, _that.lyrics);
+        return $default(_that.youtubeURL, _that.metadata, _that.globalGlossary,
+            _that.lyrics);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -259,14 +271,15 @@ extension SongLyricPatterns on SongLyric {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(Metadata metadata, List<GlobalGlossary> globalGlossary,
-            List<Lyric> lyrics)?
+    TResult? Function(String youtubeURL, Metadata metadata,
+            List<GlobalGlossary> globalGlossary, List<Lyric> lyrics)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SongLyric() when $default != null:
-        return $default(_that.metadata, _that.globalGlossary, _that.lyrics);
+        return $default(_that.youtubeURL, _that.metadata, _that.globalGlossary,
+            _that.lyrics);
       case _:
         return null;
     }
@@ -277,7 +290,8 @@ extension SongLyricPatterns on SongLyric {
 @JsonSerializable()
 class _SongLyric implements SongLyric {
   const _SongLyric(
-      {required this.metadata,
+      {required this.youtubeURL,
+      required this.metadata,
       required final List<GlobalGlossary> globalGlossary,
       required final List<Lyric> lyrics})
       : _globalGlossary = globalGlossary,
@@ -285,6 +299,8 @@ class _SongLyric implements SongLyric {
   factory _SongLyric.fromJson(Map<String, dynamic> json) =>
       _$SongLyricFromJson(json);
 
+  @override
+  final String youtubeURL;
   @override
   final Metadata metadata;
   final List<GlobalGlossary> _globalGlossary;
@@ -323,6 +339,8 @@ class _SongLyric implements SongLyric {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _SongLyric &&
+            (identical(other.youtubeURL, youtubeURL) ||
+                other.youtubeURL == youtubeURL) &&
             (identical(other.metadata, metadata) ||
                 other.metadata == metadata) &&
             const DeepCollectionEquality()
@@ -334,13 +352,14 @@ class _SongLyric implements SongLyric {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      youtubeURL,
       metadata,
       const DeepCollectionEquality().hash(_globalGlossary),
       const DeepCollectionEquality().hash(_lyrics));
 
   @override
   String toString() {
-    return 'SongLyric(metadata: $metadata, globalGlossary: $globalGlossary, lyrics: $lyrics)';
+    return 'SongLyric(youtubeURL: $youtubeURL, metadata: $metadata, globalGlossary: $globalGlossary, lyrics: $lyrics)';
   }
 }
 
@@ -353,7 +372,8 @@ abstract mixin class _$SongLyricCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Metadata metadata,
+      {String youtubeURL,
+      Metadata metadata,
       List<GlobalGlossary> globalGlossary,
       List<Lyric> lyrics});
 
@@ -373,11 +393,16 @@ class __$SongLyricCopyWithImpl<$Res> implements _$SongLyricCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? youtubeURL = null,
     Object? metadata = null,
     Object? globalGlossary = null,
     Object? lyrics = null,
   }) {
     return _then(_SongLyric(
+      youtubeURL: null == youtubeURL
+          ? _self.youtubeURL
+          : youtubeURL // ignore: cast_nullable_to_non_nullable
+              as String,
       metadata: null == metadata
           ? _self.metadata
           : metadata // ignore: cast_nullable_to_non_nullable

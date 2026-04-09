@@ -47,4 +47,4 @@ final class LyricRepositoryProvider extends $FunctionalProvider<LyricRepository,
   }
 }
 
-String _$lyricRepositoryHash() => r'b14180000fea8e37dae28bec2282d462ce38e1b2';
+String _$lyricRepositoryHash() => r'1a33a907122f45d861f4e63d7cb86e68391b275d';

@@ -16,8 +16,8 @@ T _$identity<T>(T value) => value;
 mixin _$Chunk {
   String get surface;
   String get reading;
-  String get meaning;
-  bool get isKeywoard;
+  Meaning get meaning;
+  bool get isKeyword;
 
   /// Create a copy of Chunk
   /// with the given fields replaced by the non-null parameter values.
@@ -37,18 +37,18 @@ mixin _$Chunk {
             (identical(other.surface, surface) || other.surface == surface) &&
             (identical(other.reading, reading) || other.reading == reading) &&
             (identical(other.meaning, meaning) || other.meaning == meaning) &&
-            (identical(other.isKeywoard, isKeywoard) ||
-                other.isKeywoard == isKeywoard));
+            (identical(other.isKeyword, isKeyword) ||
+                other.isKeyword == isKeyword));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, surface, reading, meaning, isKeywoard);
+      Object.hash(runtimeType, surface, reading, meaning, isKeyword);
 
   @override
   String toString() {
-    return 'Chunk(surface: $surface, reading: $reading, meaning: $meaning, isKeywoard: $isKeywoard)';
+    return 'Chunk(surface: $surface, reading: $reading, meaning: $meaning, isKeyword: $isKeyword)';
   }
 }
 
@@ -57,7 +57,9 @@ abstract mixin class $ChunkCopyWith<$Res> {
   factory $ChunkCopyWith(Chunk value, $Res Function(Chunk) _then) =
       _$ChunkCopyWithImpl;
   @useResult
-  $Res call({String surface, String reading, String meaning, bool isKeywoard});
+  $Res call({String surface, String reading, Meaning meaning, bool isKeyword});
+
+  $MeaningCopyWith<$Res> get meaning;
 }
 
 /// @nodoc
@@ -75,7 +77,7 @@ class _$ChunkCopyWithImpl<$Res> implements $ChunkCopyWith<$Res> {
     Object? surface = null,
     Object? reading = null,
     Object? meaning = null,
-    Object? isKeywoard = null,
+    Object? isKeyword = null,
   }) {
     return _then(_self.copyWith(
       surface: null == surface
@@ -89,12 +91,22 @@ class _$ChunkCopyWithImpl<$Res> implements $ChunkCopyWith<$Res> {
       meaning: null == meaning
           ? _self.meaning
           : meaning // ignore: cast_nullable_to_non_nullable
-              as String,
-      isKeywoard: null == isKeywoard
-          ? _self.isKeywoard
-          : isKeywoard // ignore: cast_nullable_to_non_nullable
+              as Meaning,
+      isKeyword: null == isKeyword
+          ? _self.isKeyword
+          : isKeyword // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
+  }
+
+  /// Create a copy of Chunk
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MeaningCopyWith<$Res> get meaning {
+    return $MeaningCopyWith<$Res>(_self.meaning, (value) {
+      return _then(_self.copyWith(meaning: value));
+    });
   }
 }
 
@@ -192,7 +204,7 @@ extension ChunkPatterns on Chunk {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            String surface, String reading, String meaning, bool isKeywoard)?
+            String surface, String reading, Meaning meaning, bool isKeyword)?
         $default, {
     required TResult orElse(),
   }) {
@@ -200,7 +212,7 @@ extension ChunkPatterns on Chunk {
     switch (_that) {
       case _Chunk() when $default != null:
         return $default(
-            _that.surface, _that.reading, _that.meaning, _that.isKeywoard);
+            _that.surface, _that.reading, _that.meaning, _that.isKeyword);
       case _:
         return orElse();
     }
@@ -222,14 +234,14 @@ extension ChunkPatterns on Chunk {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            String surface, String reading, String meaning, bool isKeywoard)
+            String surface, String reading, Meaning meaning, bool isKeyword)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _Chunk():
         return $default(
-            _that.surface, _that.reading, _that.meaning, _that.isKeywoard);
+            _that.surface, _that.reading, _that.meaning, _that.isKeyword);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -250,14 +262,14 @@ extension ChunkPatterns on Chunk {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
-            String surface, String reading, String meaning, bool isKeywoard)?
+            String surface, String reading, Meaning meaning, bool isKeyword)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _Chunk() when $default != null:
         return $default(
-            _that.surface, _that.reading, _that.meaning, _that.isKeywoard);
+            _that.surface, _that.reading, _that.meaning, _that.isKeyword);
       case _:
         return null;
     }
@@ -271,7 +283,7 @@ class _Chunk implements Chunk {
       {required this.surface,
       required this.reading,
       required this.meaning,
-      required this.isKeywoard});
+      required this.isKeyword});
   factory _Chunk.fromJson(Map<String, dynamic> json) => _$ChunkFromJson(json);
 
   @override
@@ -279,9 +291,9 @@ class _Chunk implements Chunk {
   @override
   final String reading;
   @override
-  final String meaning;
+  final Meaning meaning;
   @override
-  final bool isKeywoard;
+  final bool isKeyword;
 
   /// Create a copy of Chunk
   /// with the given fields replaced by the non-null parameter values.
@@ -306,18 +318,18 @@ class _Chunk implements Chunk {
             (identical(other.surface, surface) || other.surface == surface) &&
             (identical(other.reading, reading) || other.reading == reading) &&
             (identical(other.meaning, meaning) || other.meaning == meaning) &&
-            (identical(other.isKeywoard, isKeywoard) ||
-                other.isKeywoard == isKeywoard));
+            (identical(other.isKeyword, isKeyword) ||
+                other.isKeyword == isKeyword));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, surface, reading, meaning, isKeywoard);
+      Object.hash(runtimeType, surface, reading, meaning, isKeyword);
 
   @override
   String toString() {
-    return 'Chunk(surface: $surface, reading: $reading, meaning: $meaning, isKeywoard: $isKeywoard)';
+    return 'Chunk(surface: $surface, reading: $reading, meaning: $meaning, isKeyword: $isKeyword)';
   }
 }
 
@@ -327,7 +339,10 @@ abstract mixin class _$ChunkCopyWith<$Res> implements $ChunkCopyWith<$Res> {
       __$ChunkCopyWithImpl;
   @override
   @useResult
-  $Res call({String surface, String reading, String meaning, bool isKeywoard});
+  $Res call({String surface, String reading, Meaning meaning, bool isKeyword});
+
+  @override
+  $MeaningCopyWith<$Res> get meaning;
 }
 
 /// @nodoc
@@ -345,7 +360,7 @@ class __$ChunkCopyWithImpl<$Res> implements _$ChunkCopyWith<$Res> {
     Object? surface = null,
     Object? reading = null,
     Object? meaning = null,
-    Object? isKeywoard = null,
+    Object? isKeyword = null,
   }) {
     return _then(_Chunk(
       surface: null == surface
@@ -359,12 +374,22 @@ class __$ChunkCopyWithImpl<$Res> implements _$ChunkCopyWith<$Res> {
       meaning: null == meaning
           ? _self.meaning
           : meaning // ignore: cast_nullable_to_non_nullable
-              as String,
-      isKeywoard: null == isKeywoard
-          ? _self.isKeywoard
-          : isKeywoard // ignore: cast_nullable_to_non_nullable
+              as Meaning,
+      isKeyword: null == isKeyword
+          ? _self.isKeyword
+          : isKeyword // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
+  }
+
+  /// Create a copy of Chunk
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MeaningCopyWith<$Res> get meaning {
+    return $MeaningCopyWith<$Res>(_self.meaning, (value) {
+      return _then(_self.copyWith(meaning: value));
+    });
   }
 }
 

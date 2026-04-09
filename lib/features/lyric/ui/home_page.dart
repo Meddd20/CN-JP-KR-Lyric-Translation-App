@@ -1,12 +1,12 @@
 import 'package:cnjpkr_song_lyric_trnslt/core/enums/difficulty.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/difficulty_color.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/language_color.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/language_flag.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/models/metadata.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/models/song_lyric.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/logic/lyric_notifier.dart';
+import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/generate_button.dart';
+import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/track_card.dart';
+import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/url_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +23,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   final _urlController = TextEditingController();
   final _dummyLyrics = [
     SongLyric(
+      youtubeURL: "https://youtu.be/X918-0Ps8XY?si=rQpW4-2UmT37BE5J",
       metadata: Metadata(
         title: 'Love Poem',
         artist: 'IU',
@@ -34,6 +35,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       lyrics: [],
     ),
     SongLyric(
+      youtubeURL: "https://youtu.be/X918-0Ps8XY?si=rQpW4-2UmT37BE5J",
       metadata: Metadata(
         title: 'Stay With Me',
         artist: 'Miki Matsubara',
@@ -45,6 +47,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       lyrics: [],
     ),
     SongLyric(
+      youtubeURL: "https://youtu.be/X918-0Ps8XY?si=rQpW4-2UmT37BE5J",
       metadata: Metadata(
         title: '然后我们一起看烟花',
         artist: 'Bell玲惠',
@@ -65,6 +68,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final lyricState = ref.watch(lyricProvider);
+
     ref.listen(lyricProvider, (previous, next) {
       next.whenOrNull(data: (lyric) {
         if (lyric != null) {
@@ -96,14 +101,6 @@ class _HomePageState extends ConsumerState<HomePage> {
         centerTitle: false,
         backgroundColor: AppColors.background,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.push('/history');
-            },
-            icon: Icon(Icons.list),
-          ),
-        ],
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -120,155 +117,67 @@ class _HomePageState extends ConsumerState<HomePage> {
               Text("Chinese, Japanese, and Korean",
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
               const SizedBox(height: 20),
-              TextField(
-                controller: _urlController,
-                style: const TextStyle(color: AppColors.textPrimary),
-                decoration: InputDecoration(
-                  hintText: 'https://youtube.com/watch?v=...',
-                  hintStyle: const TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 13,
-                  ),
-                  filled: true,
-                  fillColor: AppColors.surface,
-                  suffixIcon: IconButton(
-                    onPressed: () async {
-                      if (_urlController.text.isEmpty) {
-                        final clipboard = await Clipboard.getData(Clipboard.kTextPlain);
-                        if (clipboard?.text != null) {
-                          _urlController.text = clipboard!.text!;
-                          ref.read(lyricProvider.notifier).transcribe(_urlController.text);
-                        }
-                      } else {
-                        _urlController.clear();
-                      }
-                    },
-                    icon: Icon(_urlController.text.isEmpty ? Icons.link : Icons.clear),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: AppColors.primary, width: 1.5),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    ref.read(lyricProvider.notifier).transcribe(_urlController.text);
-                  },
-                  child: Text(
-                    "Generate",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Recent Sessions",
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "View All",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                ],
+              UrlTextfield(
+                urlController: _urlController,
+                suffixIconOnpressed: () async {
+                  if (_urlController.text.isEmpty) {
+                    final clipboard = await Clipboard.getData(Clipboard.kTextPlain);
+                    if (clipboard?.text != null) {
+                      _urlController.text = clipboard!.text!;
+                      ref.read(lyricProvider.notifier).transcribe(_urlController.text);
+                    }
+                  } else {
+                    _urlController.clear();
+                  }
+                },
+                isEmpty: _urlController.text.isEmpty,
               ),
               const SizedBox(height: 16),
-              SizedBox(
-                height: 230,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: 160,
-                      margin: const EdgeInsets.only(right: 12),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(16),
+              GenerateButton(
+                isLoading: lyricState.isLoading,
+                onPressed: () {
+                  ref.read(lyricProvider.notifier).transcribe(_urlController.text);
+                },
+              ),
+              const SizedBox(height: 30),
+              if (_dummyLyrics.isNotEmpty) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Recent Sessions",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.push('/history');
+                      },
+                      child: Text(
+                        "View All",
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withValues(alpha: 0.3),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    languageFlag(_dummyLyrics[index].metadata.scriptLanguage),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    _dummyLyrics[index].metadata.scriptLanguage.name.toUpperCase(),
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textPrimary),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          // const Spacer(),
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                _dummyLyrics[index].metadata.title[0],
-                                style: TextStyle(
-                                  fontSize: 80,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white.withValues(alpha: 0.05),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            _dummyLyrics[index].metadata.title,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          Text(
-                            _dummyLyrics[index].metadata.artist,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.left,
-                          ),
-                          const SizedBox(height: 20),
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                            decoration: BoxDecoration(
-                                color: difficultyColor(_dummyLyrics[index].metadata.difficulty),
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Text(
-                              _dummyLyrics[index].metadata.difficulty.name.toUpperCase(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(color: AppColors.textPrimary, fontSize: 10),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
+                    ),
+                  ],
                 ),
-              )
+                const SizedBox(height: 16),
+                SizedBox(
+                  height: 230,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return TrackCard(
+                        language: _dummyLyrics[index].metadata.scriptLanguage,
+                        title: _dummyLyrics[index].metadata.title,
+                        artist: _dummyLyrics[index].metadata.artist,
+                        difficulty: _dummyLyrics[index].metadata.difficulty,
+                        onTap: () => context.push('/lyric/123'),
+                        youtubeURL: _dummyLyrics[index].youtubeURL,
+                      );
+                    },
+                  ),
+                )
+              ]
             ],
           ),
         ),

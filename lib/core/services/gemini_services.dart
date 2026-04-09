@@ -65,19 +65,40 @@ class GeminiService {
                   - Never use romanization or original script as translation
 
                   chunks:
-                  - Break surface_text into smallest meaningful units (per word or per character for zh)
-                  - Every chunk needs: surface, reading, meaning (in English), is_keyword
-                  - is_keyword: true ONLY if surface exists in global_glossary
+                  - Break surface_text into the smallest meaningful units
+                    - Mandarin (zh): per character or per word (e.g. 烟花 as one chunk, not 烟+花)
+                    - Japanese (ja): per word/morpheme (e.g. 吹いて as one chunk)
+                    - Korean (ko): per word/morpheme (e.g. 사랑해 as one chunk)
+                  - EVERY chunk needs: surface, reading, meaning_en, meaning_id, is_keyword
+                    - meaning_en: meaning in English
+                    - meaning_id: meaning in Indonesian
+                  - is_keyword rules:
+                    - is_keyword: TRUE for ALL content words — nouns, verbs, adjectives, adverbs, idioms, including basic function words
+                    - is_keyword: False for all punctuation/space chunks
 
                   reading:
                   - Mandarin: Pinyin with tone marks (e.g. wǒ, nǐ, tā)
                   - Japanese: Hiragana, space-separated segments
                   - Korean: Revised Romanization
+                  - English or other latin script words: reading = same as surface (no phonetic needed)
+                  - Mixed language chunks: apply reading rules based on the script of that specific chunk,
+                    not the primary language of the song
+                  
+                  mixed language:
+                  - If a line contains words from another language (English, etc), include them as-is in surface_text
+                  - For non-primary language words in chunks:
+                    - surface: the word as-is (e.g. "cuz", "I love you")
+                    - reading: same as surface (no phonetic needed)
+                    - meaning: translate to id and en as normal
+                    - is_keyword: true if it's a content word
+                  - Do NOT translate or romanize non-primary language words in surface_text
+                  - reading_text: for non-primary language segments, use the word as-is
 
                   global_glossary:
-                  - Include only high-value vocabulary — idioms, key phrases, important words
-                  - No duplicates
-                  - is_keyword in chunks must match entries here exactly
+                  - Include ALL unique content words from the entire song — nouns, verbs, adjectives, adverbs, idioms
+                  - Exclude basic function words
+                  - No duplicates — each unique surface form appears once
+                  - Both meaning_en and meaning_id required
 
                   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                   JSON SCHEMA
@@ -109,7 +130,7 @@ class GeminiService {
                           {
                             "surface": "String",
                             "reading": "String",
-                            "meaning": "String",
+                            "meaning": { "id": "String", "en": "String" },
                             "is_keyword": false
                           }
                         ]
