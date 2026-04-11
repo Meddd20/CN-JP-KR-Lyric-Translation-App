@@ -14,10 +14,12 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$SongLyric {
+  int get isarId;
   String get youtubeURL;
   Metadata get metadata;
   List<GlobalGlossary> get globalGlossary;
   List<Lyric> get lyrics;
+  DateTime get createdAt;
 
   /// Create a copy of SongLyric
   /// with the given fields replaced by the non-null parameter values.
@@ -34,27 +36,32 @@ mixin _$SongLyric {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is SongLyric &&
+            (identical(other.isarId, isarId) || other.isarId == isarId) &&
             (identical(other.youtubeURL, youtubeURL) ||
                 other.youtubeURL == youtubeURL) &&
             (identical(other.metadata, metadata) ||
                 other.metadata == metadata) &&
             const DeepCollectionEquality()
                 .equals(other.globalGlossary, globalGlossary) &&
-            const DeepCollectionEquality().equals(other.lyrics, lyrics));
+            const DeepCollectionEquality().equals(other.lyrics, lyrics) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      isarId,
       youtubeURL,
       metadata,
       const DeepCollectionEquality().hash(globalGlossary),
-      const DeepCollectionEquality().hash(lyrics));
+      const DeepCollectionEquality().hash(lyrics),
+      createdAt);
 
   @override
   String toString() {
-    return 'SongLyric(youtubeURL: $youtubeURL, metadata: $metadata, globalGlossary: $globalGlossary, lyrics: $lyrics)';
+    return 'SongLyric(isarId: $isarId, youtubeURL: $youtubeURL, metadata: $metadata, globalGlossary: $globalGlossary, lyrics: $lyrics, createdAt: $createdAt)';
   }
 }
 
@@ -64,10 +71,12 @@ abstract mixin class $SongLyricCopyWith<$Res> {
       _$SongLyricCopyWithImpl;
   @useResult
   $Res call(
-      {String youtubeURL,
+      {int isarId,
+      String youtubeURL,
       Metadata metadata,
       List<GlobalGlossary> globalGlossary,
-      List<Lyric> lyrics});
+      List<Lyric> lyrics,
+      DateTime createdAt});
 
   $MetadataCopyWith<$Res> get metadata;
 }
@@ -84,12 +93,18 @@ class _$SongLyricCopyWithImpl<$Res> implements $SongLyricCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isarId = null,
     Object? youtubeURL = null,
     Object? metadata = null,
     Object? globalGlossary = null,
     Object? lyrics = null,
+    Object? createdAt = null,
   }) {
     return _then(_self.copyWith(
+      isarId: null == isarId
+          ? _self.isarId
+          : isarId // ignore: cast_nullable_to_non_nullable
+              as int,
       youtubeURL: null == youtubeURL
           ? _self.youtubeURL
           : youtubeURL // ignore: cast_nullable_to_non_nullable
@@ -106,6 +121,10 @@ class _$SongLyricCopyWithImpl<$Res> implements $SongLyricCopyWith<$Res> {
           ? _self.lyrics
           : lyrics // ignore: cast_nullable_to_non_nullable
               as List<Lyric>,
+      createdAt: null == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 
@@ -213,16 +232,21 @@ extension SongLyricPatterns on SongLyric {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String youtubeURL, Metadata metadata,
-            List<GlobalGlossary> globalGlossary, List<Lyric> lyrics)?
+    TResult Function(
+            int isarId,
+            String youtubeURL,
+            Metadata metadata,
+            List<GlobalGlossary> globalGlossary,
+            List<Lyric> lyrics,
+            DateTime createdAt)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _SongLyric() when $default != null:
-        return $default(_that.youtubeURL, _that.metadata, _that.globalGlossary,
-            _that.lyrics);
+        return $default(_that.isarId, _that.youtubeURL, _that.metadata,
+            _that.globalGlossary, _that.lyrics, _that.createdAt);
       case _:
         return orElse();
     }
@@ -243,15 +267,20 @@ extension SongLyricPatterns on SongLyric {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String youtubeURL, Metadata metadata,
-            List<GlobalGlossary> globalGlossary, List<Lyric> lyrics)
+    TResult Function(
+            int isarId,
+            String youtubeURL,
+            Metadata metadata,
+            List<GlobalGlossary> globalGlossary,
+            List<Lyric> lyrics,
+            DateTime createdAt)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SongLyric():
-        return $default(_that.youtubeURL, _that.metadata, _that.globalGlossary,
-            _that.lyrics);
+        return $default(_that.isarId, _that.youtubeURL, _that.metadata,
+            _that.globalGlossary, _that.lyrics, _that.createdAt);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -271,15 +300,20 @@ extension SongLyricPatterns on SongLyric {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String youtubeURL, Metadata metadata,
-            List<GlobalGlossary> globalGlossary, List<Lyric> lyrics)?
+    TResult? Function(
+            int isarId,
+            String youtubeURL,
+            Metadata metadata,
+            List<GlobalGlossary> globalGlossary,
+            List<Lyric> lyrics,
+            DateTime createdAt)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SongLyric() when $default != null:
-        return $default(_that.youtubeURL, _that.metadata, _that.globalGlossary,
-            _that.lyrics);
+        return $default(_that.isarId, _that.youtubeURL, _that.metadata,
+            _that.globalGlossary, _that.lyrics, _that.createdAt);
       case _:
         return null;
     }
@@ -290,15 +324,20 @@ extension SongLyricPatterns on SongLyric {
 @JsonSerializable()
 class _SongLyric implements SongLyric {
   const _SongLyric(
-      {required this.youtubeURL,
+      {this.isarId = 0,
+      required this.youtubeURL,
       required this.metadata,
       required final List<GlobalGlossary> globalGlossary,
-      required final List<Lyric> lyrics})
+      required final List<Lyric> lyrics,
+      required this.createdAt})
       : _globalGlossary = globalGlossary,
         _lyrics = lyrics;
   factory _SongLyric.fromJson(Map<String, dynamic> json) =>
       _$SongLyricFromJson(json);
 
+  @override
+  @JsonKey()
+  final int isarId;
   @override
   final String youtubeURL;
   @override
@@ -318,6 +357,9 @@ class _SongLyric implements SongLyric {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_lyrics);
   }
+
+  @override
+  final DateTime createdAt;
 
   /// Create a copy of SongLyric
   /// with the given fields replaced by the non-null parameter values.
@@ -339,27 +381,32 @@ class _SongLyric implements SongLyric {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _SongLyric &&
+            (identical(other.isarId, isarId) || other.isarId == isarId) &&
             (identical(other.youtubeURL, youtubeURL) ||
                 other.youtubeURL == youtubeURL) &&
             (identical(other.metadata, metadata) ||
                 other.metadata == metadata) &&
             const DeepCollectionEquality()
                 .equals(other._globalGlossary, _globalGlossary) &&
-            const DeepCollectionEquality().equals(other._lyrics, _lyrics));
+            const DeepCollectionEquality().equals(other._lyrics, _lyrics) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      isarId,
       youtubeURL,
       metadata,
       const DeepCollectionEquality().hash(_globalGlossary),
-      const DeepCollectionEquality().hash(_lyrics));
+      const DeepCollectionEquality().hash(_lyrics),
+      createdAt);
 
   @override
   String toString() {
-    return 'SongLyric(youtubeURL: $youtubeURL, metadata: $metadata, globalGlossary: $globalGlossary, lyrics: $lyrics)';
+    return 'SongLyric(isarId: $isarId, youtubeURL: $youtubeURL, metadata: $metadata, globalGlossary: $globalGlossary, lyrics: $lyrics, createdAt: $createdAt)';
   }
 }
 
@@ -372,10 +419,12 @@ abstract mixin class _$SongLyricCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String youtubeURL,
+      {int isarId,
+      String youtubeURL,
       Metadata metadata,
       List<GlobalGlossary> globalGlossary,
-      List<Lyric> lyrics});
+      List<Lyric> lyrics,
+      DateTime createdAt});
 
   @override
   $MetadataCopyWith<$Res> get metadata;
@@ -393,12 +442,18 @@ class __$SongLyricCopyWithImpl<$Res> implements _$SongLyricCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? isarId = null,
     Object? youtubeURL = null,
     Object? metadata = null,
     Object? globalGlossary = null,
     Object? lyrics = null,
+    Object? createdAt = null,
   }) {
     return _then(_SongLyric(
+      isarId: null == isarId
+          ? _self.isarId
+          : isarId // ignore: cast_nullable_to_non_nullable
+              as int,
       youtubeURL: null == youtubeURL
           ? _self.youtubeURL
           : youtubeURL // ignore: cast_nullable_to_non_nullable
@@ -415,6 +470,10 @@ class __$SongLyricCopyWithImpl<$Res> implements _$SongLyricCopyWith<$Res> {
           ? _self._lyrics
           : lyrics // ignore: cast_nullable_to_non_nullable
               as List<Lyric>,
+      createdAt: null == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 

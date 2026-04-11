@@ -8,11 +8,14 @@ part 'song_lyric.g.dart';
 
 @freezed
 abstract class SongLyric with _$SongLyric {
-  const factory SongLyric(
-      {required String youtubeURL,
-      required Metadata metadata,
-      required List<GlobalGlossary> globalGlossary,
-      required List<Lyric> lyrics}) = _SongLyric;
+  const factory SongLyric({
+    @Default(0) int isarId,
+    required String youtubeURL,
+    required Metadata metadata,
+    required List<GlobalGlossary> globalGlossary,
+    required List<Lyric> lyrics,
+    required DateTime createdAt,
+  }) = _SongLyric;
 
   factory SongLyric.fromJson(Map<String, dynamic> json) => _$SongLyricFromJson(json);
 }

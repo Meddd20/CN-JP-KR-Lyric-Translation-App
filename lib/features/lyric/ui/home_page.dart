@@ -1,7 +1,4 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/difficulty.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/metadata.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/song_lyric.dart';
+import 'package:cnjpkr_song_lyric_trnslt/core/repositories/lyric_repository.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/logic/lyric_notifier.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/generate_button.dart';
@@ -21,44 +18,6 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final _urlController = TextEditingController();
-  final _dummyLyrics = [
-    SongLyric(
-      youtubeURL: "https://youtu.be/X918-0Ps8XY?si=rQpW4-2UmT37BE5J",
-      metadata: Metadata(
-        title: 'Love Poem',
-        artist: 'IU',
-        scriptLanguage: ScriptLanguage.ko,
-        difficulty: Difficulty.intermediate,
-        tags: ['love', 'ballad'],
-      ),
-      globalGlossary: [],
-      lyrics: [],
-    ),
-    SongLyric(
-      youtubeURL: "https://youtu.be/X918-0Ps8XY?si=rQpW4-2UmT37BE5J",
-      metadata: Metadata(
-        title: 'Stay With Me',
-        artist: 'Miki Matsubara',
-        scriptLanguage: ScriptLanguage.ja,
-        difficulty: Difficulty.advanced,
-        tags: ['city pop', 'classic'],
-      ),
-      globalGlossary: [],
-      lyrics: [],
-    ),
-    SongLyric(
-      youtubeURL: "https://youtu.be/X918-0Ps8XY?si=rQpW4-2UmT37BE5J",
-      metadata: Metadata(
-        title: '然后我们一起看烟花',
-        artist: 'Bell玲惠',
-        scriptLanguage: ScriptLanguage.zh,
-        difficulty: Difficulty.intermediate,
-        tags: ['romance', 'ballad'],
-      ),
-      globalGlossary: [],
-      lyrics: [],
-    ),
-  ];
 
   @override
   void initState() {
@@ -69,12 +28,13 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final lyricState = ref.watch(lyricProvider);
+    final recentHistory = ref.read(recentHistoryProvider);
 
     ref.listen(lyricProvider, (previous, next) {
       next.whenOrNull(data: (lyric) {
         if (lyric != null) {
           _urlController.clear();
-          context.push('/lyric/detail');
+          context.push('/lyric/detail', extra: lyric);
         }
       }, error: (e, _) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -140,44 +100,54 @@ class _HomePageState extends ConsumerState<HomePage> {
                 },
               ),
               const SizedBox(height: 30),
-              if (_dummyLyrics.isNotEmpty) ...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Recent Sessions",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        context.push('/history');
-                      },
-                      child: Text(
-                        "View All",
-                        style: Theme.of(context).textTheme.bodyMedium,
+              recentHistory.when(
+                error: (e, _) => const SizedBox(),
+                loading: () => const SizedBox(),
+                data: (lyrics) {
+                  if (lyrics.isEmpty) return const SizedBox();
+
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Recent Sessions",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.push('/history');
+                            },
+                            child: Text(
+                              "View All",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 230,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return TrackCard(
-                        language: _dummyLyrics[index].metadata.scriptLanguage,
-                        title: _dummyLyrics[index].metadata.title,
-                        artist: _dummyLyrics[index].metadata.artist,
-                        difficulty: _dummyLyrics[index].metadata.difficulty,
-                        onTap: () => context.push('/lyric/123'),
-                        youtubeURL: _dummyLyrics[index].youtubeURL,
-                      );
-                    },
-                  ),
-                )
-              ]
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        height: 230,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: lyrics.length,
+                          itemBuilder: (context, index) {
+                            return TrackCard(
+                              language: lyrics[index].metadata.scriptLanguage,
+                              title: lyrics[index].metadata.title,
+                              artist: lyrics[index].metadata.artist,
+                              difficulty: lyrics[index].metadata.difficulty,
+                              onTap: () => context.push('/lyric/detail', extra: lyrics[index]),
+                              youtubeURL: lyrics[index].youtubeURL,
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         ),

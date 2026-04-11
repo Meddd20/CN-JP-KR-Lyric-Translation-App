@@ -35,27 +35,25 @@ class TrackCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
-          image: DecorationImage(
-            image: NetworkImage("https://img.youtube.com/vi/${getYoutubeId(youtubeURL)}/maxresdefault.jpg"),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withValues(alpha: 0.4),
-              BlendMode.darken,
-            ),
-          ),
         ),
         child: Stack(
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: CachedNetworkImage(
-                imageUrl: "https://img.youtube.com/vi/${getYoutubeId(youtubeURL)}/maxresdefault.jpg",
+                imageUrl: getYoutubeThumbnail(youtubeURL),
                 width: 160,
                 height: double.infinity,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) => CachedNetworkImage(
-                  imageUrl: 'https://img.youtube.com/vi/${getYoutubeId(youtubeURL)}/hqdefault.jpg',
+                  imageUrl: getYoutubeThumbnailFallback(youtubeURL),
+                  width: 160,
+                  height: double.infinity,
                   fit: BoxFit.cover,
+                  errorWidget: (context, url, error) => Container(
+                    color: AppColors.surface,
+                    child: const Icon(Icons.music_note, color: AppColors.textMuted),
+                  ),
                 ),
               ),
             ),
@@ -130,8 +128,11 @@ class TrackCard extends StatelessWidget {
                         BoxDecoration(color: difficultyColor(difficulty), borderRadius: BorderRadius.circular(12)),
                     child: Text(
                       difficulty.name.toUpperCase(),
-                      style:
-                          Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textPrimary, fontSize: 10),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textPrimary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
                   )
                 ],

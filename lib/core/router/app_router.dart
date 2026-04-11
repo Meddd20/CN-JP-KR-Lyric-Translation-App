@@ -1,3 +1,4 @@
+import 'package:cnjpkr_song_lyric_trnslt/core/models/song_lyric.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/router/main_shell.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/history_page.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/home_page.dart';
@@ -33,6 +34,13 @@ final appRouter = GoRouter(
           lyricId: id,
         );
       },
-    )
+    ),
+    GoRoute(
+      path: '/lyric/detail',
+      builder: (context, state) {
+        final lyric = state.extra as SongLyric?;
+        return LyricDetailPage(songLyric: lyric);
+      },
+    ),
   ],
 );
