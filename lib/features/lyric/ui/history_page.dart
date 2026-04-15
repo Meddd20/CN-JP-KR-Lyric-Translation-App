@@ -2,7 +2,7 @@ import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/models/song_lyric.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/repositories/lyric_repository.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/repositories/saved_keyword_repository.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:cnjpkr_song_lyric_trnslt/core/widgets/custom_search_bar.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/filter_by_language_chip.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/history_card.dart';
 import 'package:flutter/material.dart';
@@ -45,66 +45,53 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
     final searchState = ref.watch(songsByTitleArtistProvider(_searchController.text));
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 50, 24, 120),
-        child: Column(
-          children: [
-            SearchBar(
-              controller: _searchController,
-              hintText: "Search by title or artist...",
-              hintStyle:
-                  WidgetStatePropertyAll(Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textMuted)),
-              elevation: const WidgetStatePropertyAll(0),
-              shadowColor: const WidgetStatePropertyAll(Colors.transparent),
-              backgroundColor: const WidgetStatePropertyAll(AppColors.surface),
-              onChanged: (value) {
-                setState(() {});
-              },
-              onTapOutside: (PointerDownEvent event) {
-                FocusScope.of(context).unfocus();
-              },
-              leading: const Icon(
-                Icons.search,
-                color: AppColors.textMuted,
-              ),
-              trailing: [
-                if (_searchController.text.isNotEmpty)
-                  IconButton(
-                    onPressed: () {
-                      _searchController.clear();
-                    },
-                    icon: Icon(
-                      Icons.clear,
-                      color: AppColors.textMuted,
-                    ),
-                  )
-              ],
-            ),
-            const SizedBox(height: 15),
-            SizedBox(
-              height: Theme.of(context).textTheme.bodySmall!.fontSize! * 2.65,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: categories.length,
-                separatorBuilder: (context, index) => SizedBox(width: 12),
-                itemBuilder: (context, index) {
-                  return FilterByLanguageChip(
-                    label: categories[index],
-                    isSelected: index == selectedIndex,
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = index;
-                      });
-                    },
-                  );
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 50, 24, 120),
+          child: Column(
+            children: [
+              CustomSearchBar(
+                searchController: _searchController,
+                hintText: "Search by title or artist...",
+                onChanged: (value) {
+                  setState(() {});
+                },
+                onTapOutside: (PointerDownEvent event) {
+                  FocusScope.of(context).unfocus();
+                },
+                onDeleteText: () {
+                  _searchController.clear();
+                  setState(() {});
                 },
               ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: _searchController.text.isEmpty ? _buildList(historyState) : _buildList(searchState),
-            )
-          ],
+              const SizedBox(height: 15),
+              SizedBox(
+                height: Theme.of(context).textTheme.bodySmall!.fontSize! * 2.65,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.length,
+                  separatorBuilder: (context, index) => SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    return FilterByLanguageChip(
+                      label: categories[index],
+                      isSelected: index == selectedIndex,
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                      },
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: _searchController.text.isEmpty ? _buildList(historyState) : _buildList(searchState),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -119,11 +106,14 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
         child: CircularProgressIndicator(),
       ),
       data: (songs) => songs.isEmpty
-          ? const Center(
-              child: Text("No Songs Found"),
+          ? SizedBox(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: const Center(
+                child: Text("No song saved yet"),
+              ),
             )
           : ListView.builder(
-              itemCount: 5,
+              itemCount: songs.length < 5 ? songs.length : 5,
               itemBuilder: (context, index) {
                 return Dismissible(
                   key: Key(songs[index].isarId.toString()),

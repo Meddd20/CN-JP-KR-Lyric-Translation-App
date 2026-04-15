@@ -126,3 +126,178 @@ final class SavedKeywordsFamily extends $Family
   @override
   String toString() => r'savedKeywordsProvider';
 }
+
+@ProviderFor(keywordByLanguage)
+final keywordByLanguageProvider = KeywordByLanguageFamily._();
+
+final class KeywordByLanguageProvider extends $FunctionalProvider<
+        AsyncValue<List<SavedKeyword>>,
+        List<SavedKeyword>,
+        FutureOr<List<SavedKeyword>>>
+    with
+        $FutureModifier<List<SavedKeyword>>,
+        $FutureProvider<List<SavedKeyword>> {
+  KeywordByLanguageProvider._(
+      {required KeywordByLanguageFamily super.from,
+      required (
+        ScriptLanguage,
+        VocabSortBy,
+      )
+          super.argument})
+      : super(
+          retry: null,
+          name: r'keywordByLanguageProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$keywordByLanguageHash();
+
+  @override
+  String toString() {
+    return r'keywordByLanguageProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<SavedKeyword>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<SavedKeyword>> create(Ref ref) {
+    final argument = this.argument as (
+      ScriptLanguage,
+      VocabSortBy,
+    );
+    return keywordByLanguage(
+      ref,
+      argument.$1,
+      argument.$2,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is KeywordByLanguageProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$keywordByLanguageHash() => r'cce9cc3a2c235acd7cb92a73104143aa33131076';
+
+final class KeywordByLanguageFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+            FutureOr<List<SavedKeyword>>,
+            (
+              ScriptLanguage,
+              VocabSortBy,
+            )> {
+  KeywordByLanguageFamily._()
+      : super(
+          retry: null,
+          name: r'keywordByLanguageProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  KeywordByLanguageProvider call(
+    ScriptLanguage language,
+    VocabSortBy sortBy,
+  ) =>
+      KeywordByLanguageProvider._(argument: (
+        language,
+        sortBy,
+      ), from: this);
+
+  @override
+  String toString() => r'keywordByLanguageProvider';
+}
+
+@ProviderFor(searchKeyword)
+final searchKeywordProvider = SearchKeywordFamily._();
+
+final class SearchKeywordProvider extends $FunctionalProvider<
+        AsyncValue<List<SavedKeyword>>,
+        List<SavedKeyword>,
+        FutureOr<List<SavedKeyword>>>
+    with
+        $FutureModifier<List<SavedKeyword>>,
+        $FutureProvider<List<SavedKeyword>> {
+  SearchKeywordProvider._(
+      {required SearchKeywordFamily super.from, required String super.argument})
+      : super(
+          retry: null,
+          name: r'searchKeywordProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$searchKeywordHash();
+
+  @override
+  String toString() {
+    return r'searchKeywordProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<SavedKeyword>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<SavedKeyword>> create(Ref ref) {
+    final argument = this.argument as String;
+    return searchKeyword(
+      ref,
+      argument,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SearchKeywordProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$searchKeywordHash() => r'0c1ade7dbd37eee17e49b6ad33c02e18689c11e2';
+
+final class SearchKeywordFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<SavedKeyword>>, String> {
+  SearchKeywordFamily._()
+      : super(
+          retry: null,
+          name: r'searchKeywordProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  SearchKeywordProvider call(
+    String query,
+  ) =>
+      SearchKeywordProvider._(argument: query, from: this);
+
+  @override
+  String toString() => r'searchKeywordProvider';
+}

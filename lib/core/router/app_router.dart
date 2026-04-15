@@ -1,8 +1,10 @@
+import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/models/song_lyric.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/router/main_shell.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/history_page.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/home_page.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/lyric_detail_page.dart';
+import 'package:cnjpkr_song_lyric_trnslt/features/vocabulary/vocabulary_detail_page.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/vocabulary/vocabulary_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -42,5 +44,13 @@ final appRouter = GoRouter(
         return LyricDetailPage(songLyric: lyric);
       },
     ),
+    GoRoute(
+      path: '/vocabulary/:language',
+      builder: (context, state) {
+        final lang = state.pathParameters['language']!;
+        final language = ScriptLanguage.values.byName(lang);
+        return VocabularyDetailPage(language: language);
+      },
+    )
   ],
 );

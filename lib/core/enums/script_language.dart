@@ -8,3 +8,16 @@ enum ScriptLanguage {
   @JsonValue("ko")
   ko,
 }
+
+extension ScriptLanguageExtension on ScriptLanguage {
+  String get displayName {
+    switch (this) {
+      case ScriptLanguage.zh:
+        return 'Chinese';
+      case ScriptLanguage.ja:
+        return 'Japanese';
+      case ScriptLanguage.ko:
+        return 'Korean';
+    }
+  }
+}
