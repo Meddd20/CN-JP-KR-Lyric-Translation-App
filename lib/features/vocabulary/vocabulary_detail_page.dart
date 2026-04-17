@@ -196,17 +196,36 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: VocabularyCard(
-                    language: widget.language,
-                    surface: keywords[index].surface,
-                    reading: keywords[index].reading,
-                    meaning: keywords[index].meaningEn,
-                    navigateToSong: () {
-                      context.push('/lyric/${keywords[index].songLyricId}');
-                    },
-                    songReference: keywords[index].songTitle,
+                return Dismissible(
+                  key: Key(keywords[index].id.toString()),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 20),
+                    color: Colors.red,
+                    child: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                  confirmDismiss: (direction) async {
+                    final deletedId = keywords[index].id;
+                    await ref.read(savedKeywordRepositoryProvider).deleteKeyword(deletedId);
+                    ref.invalidate(keywordByLanguageProvider(widget.language, sortBy));
+                    return false;
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: VocabularyCard(
+                      language: widget.language,
+                      surface: keywords[index].surface,
+                      reading: keywords[index].reading,
+                      meaning: keywords[index].meaningEn,
+                      navigateToSong: () {
+                        context.push('/lyric/${keywords[index].songLyricId}');
+                      },
+                      songReference: keywords[index].songTitle,
+                    ),
                   ),
                 );
               },

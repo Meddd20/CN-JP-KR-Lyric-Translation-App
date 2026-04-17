@@ -1,7 +1,7 @@
 import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/models/song_lyric.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/repositories/lyric_repository.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/repositories/saved_keyword_repository.dart';
+import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/widgets/custom_search_bar.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/filter_by_language_chip.dart';
 import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/history_card.dart';
@@ -108,8 +108,29 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
       data: (songs) => songs.isEmpty
           ? SizedBox(
               height: MediaQuery.of(context).size.height * 0.8,
-              child: const Center(
-                child: Text("No song saved yet"),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.library_music, size: 48, color: AppColors.textMuted),
+                    const SizedBox(height: 12),
+                    Text(
+                      "No songs saved yet",
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "Paste a YouTube URL on the home page to get started",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textMuted,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             )
           : ListView.builder(
@@ -127,9 +148,10 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                       color: Colors.white,
                     ),
                   ),
-                  onDismissed: (direction) async {
-                    await ref.read(savedKeywordRepositoryProvider).deleteKeyword(songs[index].isarId);
+                  confirmDismiss: (direction) async {
+                    await ref.read(lyricRepositoryProvider).delete(songs[index].isarId);
                     ref.invalidate(getHistoryProvider(_selectedLanguage));
+                    return false;
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),

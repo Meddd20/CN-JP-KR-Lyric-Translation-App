@@ -39,6 +39,7 @@ class VocabularyPage extends ConsumerWidget {
               const SizedBox(height: 20),
               japaneseKeywords.when(
                 data: (keywords) {
+                  if (keywords.isEmpty) return const SizedBox();
                   return VocabularyLanguagePreviewSection(
                     language: ScriptLanguage.ja,
                     navigateToVocabDetail: () {
@@ -53,6 +54,7 @@ class VocabularyPage extends ConsumerWidget {
               const SizedBox(height: 15),
               koreanKeywords.when(
                 data: (keywords) {
+                  if (keywords.isEmpty) return const SizedBox();
                   return VocabularyLanguagePreviewSection(
                     language: ScriptLanguage.ko,
                     navigateToVocabDetail: () {
@@ -67,6 +69,7 @@ class VocabularyPage extends ConsumerWidget {
               const SizedBox(height: 15),
               chineseKeywords.when(
                 data: (keywords) {
+                  if (keywords.isEmpty) return const SizedBox();
                   return VocabularyLanguagePreviewSection(
                     language: ScriptLanguage.zh,
                     navigateToVocabDetail: () {
@@ -77,7 +80,31 @@ class VocabularyPage extends ConsumerWidget {
                 },
                 error: (error, _) => const SizedBox(),
                 loading: () => const SizedBox(),
-              )
+              ),
+              if (japaneseKeywords.value?.isEmpty == true &&
+                  chineseKeywords.value?.isEmpty == true &&
+                  koreanKeywords.value?.isEmpty == true)
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.bookmark_outline, size: 48, color: AppColors.textMuted),
+                        const SizedBox(height: 12),
+                        Text(
+                          "No vocabulary saved yet",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "Save words from lyrics to see them here",
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
             ],
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:cnjpkr_song_lyric_trnslt/core/router/app_router.dart';
 import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,6 +16,8 @@ Future<void> main() async {
   final dir = await getApplicationDocumentsDirectory();
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  await dotenv.load(fileName: ".env");
 
   // Buka database Isar — kalau belum ada, Isar buat file baru
   // SongLyricEntitySchema = struktur tabel yang digenerate dari @collection
