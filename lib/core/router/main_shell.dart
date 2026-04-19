@@ -1,10 +1,13 @@
 import 'dart:ui';
 
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:Versalex/core/l10n/app_localizations.dart';
+import 'package:Versalex/core/providers/language_provider.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class MainShell extends StatelessWidget {
+class MainShell extends ConsumerWidget {
   final Widget child;
   const MainShell({super.key, required this.child});
 
@@ -16,7 +19,9 @@ class MainShell extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations(ref.watch(languageProviderProvider));
+
     return Scaffold(
       extendBody: true,
       body: child,
@@ -51,31 +56,22 @@ class MainShell extends StatelessWidget {
                       break;
                   }
                 },
-                destinations: const [
+                destinations: [
                   NavigationDestination(
-                    icon: Icon(Icons.home_outlined),
-                    selectedIcon: Icon(
-                      Icons.home,
-                      color: AppColors.primary,
-                    ),
-                    label: "Home",
+                    icon: const Icon(Icons.home_outlined),
+                    selectedIcon: const Icon(Icons.home, color: AppColors.primary),
+                    label: l10n.navHome,
                   ),
                   NavigationDestination(
-                    icon: Icon(Icons.history_outlined),
-                    selectedIcon: Icon(
-                      Icons.history,
-                      color: AppColors.primary,
-                    ),
-                    label: "History",
+                    icon: const Icon(Icons.history_outlined),
+                    selectedIcon: const Icon(Icons.history, color: AppColors.primary),
+                    label: l10n.navHistory,
                   ),
                   NavigationDestination(
-                    icon: Icon(Icons.bookmark_outline),
-                    selectedIcon: Icon(
-                      Icons.bookmark,
-                      color: AppColors.primary,
-                    ),
-                    label: "Vocabulary",
-                  )
+                    icon: const Icon(Icons.bookmark_outline),
+                    selectedIcon: const Icon(Icons.bookmark, color: AppColors.primary),
+                    label: l10n.navVocabulary,
+                  ),
                 ],
               ),
             ),

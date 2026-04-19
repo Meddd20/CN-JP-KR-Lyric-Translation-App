@@ -1,4 +1,4 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
+import 'package:Versalex/core/enums/script_language.dart';
 import 'package:isar_community/isar.dart';
 
 part 'saved_keyword_entity.g.dart';
@@ -14,8 +14,6 @@ class SavedKeywordEntity {
   late String meaningId;
   late int songLyricId;
   late String songTitle;
-  late String lineId;
-  late String surfaceText;
 
   @enumerated
   @Index()

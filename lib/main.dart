@@ -1,14 +1,15 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/databases/isar_provider.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/databases/models/saved_keyword_entity.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/databases/models/song_lyric_entity.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/router/app_router.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:Versalex/core/databases/isar_provider.dart';
+import 'package:Versalex/core/databases/models/saved_keyword_entity.dart';
+import 'package:Versalex/core/databases/models/song_lyric_entity.dart';
+import 'package:Versalex/core/router/app_router.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,8 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await dotenv.load(fileName: ".env");
+
+  final prefs = await SharedPreferences.getInstance();
 
   // Buka database Isar — kalau belum ada, Isar buat file baru
   // SongLyricEntitySchema = struktur tabel yang digenerate dari @collection
@@ -34,6 +37,7 @@ Future<void> main() async {
       // sehingga repository yang inject isarProvider dapat instance yang sama
       overrides: [
         isarProvider.overrideWithValue(isar),
+        // sharedpreferepro.overrideWithValue(AsyncValue.data(prefs)),
       ],
       child: const MyApp(),
     ),

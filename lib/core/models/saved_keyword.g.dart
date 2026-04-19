@@ -15,8 +15,6 @@ _SavedKeyword _$SavedKeywordFromJson(Map<String, dynamic> json) =>
       meaningId: json['meaningId'] as String,
       songLyricId: (json['songLyricId'] as num).toInt(),
       songTitle: json['songTitle'] as String,
-      lineId: json['lineId'] as String,
-      surfaceText: json['surfaceText'] as String,
       language: $enumDecode(_$ScriptLanguageEnumMap, json['language']),
       savedAt: DateTime.parse(json['savedAt'] as String),
     );
@@ -30,8 +28,6 @@ Map<String, dynamic> _$SavedKeywordToJson(_SavedKeyword instance) =>
       'meaningId': instance.meaningId,
       'songLyricId': instance.songLyricId,
       'songTitle': instance.songTitle,
-      'lineId': instance.lineId,
-      'surfaceText': instance.surfaceText,
       'language': _$ScriptLanguageEnumMap[instance.language]!,
       'savedAt': instance.savedAt.toIso8601String(),
     };

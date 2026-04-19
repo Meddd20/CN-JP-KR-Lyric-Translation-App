@@ -1,12 +1,18 @@
 import 'dart:async';
 
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/check_connectivity.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/chunk.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/saved_keyword.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/song_lyric.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/repositories/lyric_repository.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/repositories/saved_keyword_repository.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:Versalex/core/enums/app_languages.dart';
+import 'package:Versalex/core/enums/difficulty.dart';
+import 'package:Versalex/core/l10n/app_localizations.dart';
+import 'package:Versalex/core/enums/script_language.dart';
+import 'package:Versalex/core/helpers/check_connectivity.dart';
+import 'package:Versalex/core/models/chunk.dart';
+import 'package:Versalex/core/models/saved_keyword.dart';
+import 'package:Versalex/core/models/song_lyric.dart';
+import 'package:Versalex/core/providers/language_provider.dart';
+import 'package:Versalex/core/repositories/lyric_repository.dart';
+import 'package:Versalex/core/repositories/saved_keyword_repository.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
+import 'package:Versalex/core/widgets/difficulty_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -59,6 +65,9 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final language = ref.watch(languageProviderProvider);
+    final l10n = AppLocalizations(language);
+
     SongLyric? song;
     if (widget.songLyric != null) {
       song = widget.songLyric;
@@ -92,6 +101,8 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
+            scrolledUnderElevation: 0,
+            surfaceTintColor: Colors.transparent,
             leading: GestureDetector(
               onTap: () => context.pop(),
               child: Container(
@@ -114,17 +125,274 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
                   : Container(
                       height: 200,
                       color: AppColors.surface,
-                      child: const Center(
+                      child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.wifi_off, color: AppColors.textMuted, size: 40),
-                            SizedBox(height: 8),
-                            Text('No internet connection'),
+                            const Icon(Icons.wifi_off, color: AppColors.textMuted, size: 40),
+                            const SizedBox(height: 8),
+                            Text(l10n.noInternetConnection),
                           ],
                         ),
                       ),
                     ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          song?.metadata.title ?? "",
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          song?.metadata.artist ?? "",
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: AppColors.textMuted,
+                              ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        DifficultyChip(difficulty: song?.metadata.difficulty ?? Difficulty.beginner),
+                        const SizedBox(height: 4),
+                        Text(
+                          "${song?.metadata.scriptLanguage.name ?? ""} ${song?.metadata.scriptLanguage.displayName ?? ""}",
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: AppColors.textMuted,
+                              ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: AppColors.surface,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                          ),
+                          builder: (context) {
+                            return Consumer(
+                              builder: (context, ref, child) {
+                                final surfaceKey = song!.globalGlossary.map((c) => c.surface).join(',');
+                                final savedState = ref.watch(savedKeywordsProvider(surfaceKey));
+
+                                return savedState.when(
+                                  loading: () => const Center(child: CircularProgressIndicator()),
+                                  error: (e, _) => const Center(child: Text('Error')),
+                                  data: (data) {
+                                    return SizedBox(
+                                      width: double.infinity,
+                                      height: MediaQuery.of(context).size.height * 0.8,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(24, 14, 24, 14),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        l10n.songGlossary,
+                                                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                                              color: AppColors.textPrimary,
+                                                              fontWeight: FontWeight.w600,
+                                                            ),
+                                                      ),
+                                                      Text(
+                                                        "${song?.globalGlossary.length} ${l10n.uniqueWords}",
+                                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                              color: AppColors.textMuted,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      context.pop();
+                                                    },
+                                                    icon: Icon(Icons.close),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: ListView.separated(
+                                              separatorBuilder: (_, __) => SizedBox(
+                                                height: 8,
+                                              ),
+                                              itemCount: song?.globalGlossary.length ?? 0,
+                                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                                              itemBuilder: (contxt, index) {
+                                                final item = song!.globalGlossary[index];
+                                                final isSaved = data.contains(item.surface);
+                                                return Container(
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.surface,
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    border: isSaved
+                                                        ? Border.all(color: AppColors.primary, width: 1.5)
+                                                        : Border.all(color: AppColors.surfaceHigh, width: 1),
+                                                  ),
+                                                  child: InkWell(
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    onTap: () async {
+                                                      HapticFeedback.lightImpact();
+
+                                                      if (isSaved) {
+                                                        final entities = await ref
+                                                            .read(savedKeywordRepositoryProvider)
+                                                            .getBySurface(item.surface);
+
+                                                        if (entities != null) {
+                                                          await ref
+                                                              .read(savedKeywordRepositoryProvider)
+                                                              .deleteKeyword(entities.id);
+                                                        }
+                                                      } else {
+                                                        await ref.read(savedKeywordRepositoryProvider).saveKeyword(
+                                                              SavedKeyword(
+                                                                id: 0,
+                                                                surface: item.surface,
+                                                                reading: item.reading,
+                                                                meaningEn: item.meaning.en,
+                                                                meaningId: item.meaning.id,
+                                                                songLyricId: song!.isarId,
+                                                                songTitle: song.metadata.title,
+                                                                language: song.metadata.scriptLanguage,
+                                                                savedAt: DateTime.now(),
+                                                              ),
+                                                            );
+                                                      }
+                                                      ref.invalidate(savedKeywordsProvider(surfaceKey));
+                                                    },
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            item.surface,
+                                                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                                  color: AppColors.textPrimary,
+                                                                  fontSize: 18,
+                                                                  fontWeight: FontWeight.w600,
+                                                                ),
+                                                          ),
+                                                          const SizedBox(width: 12),
+                                                          Text(
+                                                            item.reading,
+                                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                                  color: AppColors.primary,
+                                                                ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              language == AppLanguage.en
+                                                                  ? item.meaning.en
+                                                                  : item.meaning.id,
+                                                              textAlign: TextAlign.end,
+                                                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                                    color: AppColors.textMuted,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.auto_stories,
+                                size: 16,
+                                color: AppColors.textMuted,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                "Glossary • ${song?.globalGlossary.length} ${l10n.words}",
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: AppColors.textMuted,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
               const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
@@ -155,157 +423,160 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
                                     loading: () => const Center(child: CircularProgressIndicator()),
                                     error: (e, _) => const Center(child: Text('Error')),
                                     data: (savedSurfaces) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 24,
-                                          right: 24,
-                                          top: 24,
-                                          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text("Analyzing Phrase", style: Theme.of(context).textTheme.titleLarge),
-                                            Text(
-                                              "Tap to save keyword you find interesting",
-                                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                    color: AppColors.textMuted,
-                                                  ),
-                                            ),
-                                            const SizedBox(height: 20),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Wrap(
-                                                  alignment: WrapAlignment.center,
-                                                  spacing: 4,
-                                                  runSpacing: 4,
-                                                  children: lyric.chunks.map((chunk) {
-                                                    if (chunk.reading.isEmpty) {
-                                                      return Text(chunk.surface);
-                                                    }
-
-                                                    return Column(
-                                                      children: [
-                                                        Text(
-                                                          chunk.reading,
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .bodyMedium
-                                                              ?.copyWith(color: AppColors.primary),
-                                                        ),
-                                                        const SizedBox(height: 4),
-                                                        Text(
-                                                          chunk.surface,
-                                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                                color: AppColors.textPrimary,
-                                                                fontSize: 24,
-                                                                fontWeight: FontWeight.w600,
-                                                              ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  }).toList(),
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  lyric.translation.id,
-                                                  textAlign: TextAlign.center,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium
-                                                      ?.copyWith(color: AppColors.textMuted),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 20),
-                                            Wrap(
-                                              spacing: 12,
-                                              runSpacing: 12,
-                                              alignment: WrapAlignment.center,
-                                              children: lyric.chunks.where((chunk) => chunk.isKeyword).map((chunk) {
-                                                final isSaved = savedSurfaces.contains(chunk.surface);
-                                                return GestureDetector(
-                                                  onTap: () async {
-                                                    HapticFeedback.lightImpact();
-
-                                                    if (isSaved) {
-                                                      final entities = await ref
-                                                          .read(savedKeywordRepositoryProvider)
-                                                          .getByChunk(chunk.surface, lyric.lineId);
-
-                                                      if (entities != null) {
-                                                        await ref
-                                                            .read(savedKeywordRepositoryProvider)
-                                                            .deleteKeyword(entities.id);
+                                      return SizedBox(
+                                        width: double.infinity,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                            left: 24,
+                                            right: 24,
+                                            top: 24,
+                                            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+                                          ),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text(l10n.analyzingPhrase, style: Theme.of(context).textTheme.titleLarge),
+                                              Text(
+                                                l10n.tapToSaveKeyword,
+                                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                      color: AppColors.textMuted,
+                                                    ),
+                                              ),
+                                              const SizedBox(height: 20),
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Wrap(
+                                                    alignment: WrapAlignment.center,
+                                                    spacing: 4,
+                                                    runSpacing: 4,
+                                                    children: lyric.chunks.map((chunk) {
+                                                      if (chunk.reading.isEmpty) {
+                                                        return Text(chunk.surface);
                                                       }
-                                                    } else {
-                                                      await ref.read(savedKeywordRepositoryProvider).saveKeyword(
-                                                            SavedKeyword(
-                                                              id: 0,
-                                                              surface: chunk.surface,
-                                                              reading: chunk.reading,
-                                                              meaningEn: chunk.meaning.en,
-                                                              meaningId: chunk.meaning.id,
-                                                              songLyricId: song!.isarId,
-                                                              songTitle: song.metadata.title,
-                                                              lineId: lyric.lineId,
-                                                              surfaceText: lyric.surfaceText,
-                                                              language: song.metadata.scriptLanguage,
-                                                              savedAt: DateTime.now(),
-                                                            ),
-                                                          );
-                                                    }
-                                                    ref.invalidate(savedKeywordsProvider(surfaceKey));
-                                                  },
-                                                  child: AnimatedContainer(
-                                                    duration: const Duration(milliseconds: 200),
-                                                    curve: Curves.bounceInOut,
-                                                    padding: const EdgeInsets.all(12),
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors.surface,
-                                                      borderRadius: BorderRadius.circular(16),
-                                                      border: isSaved
-                                                          ? Border.all(color: AppColors.primary, width: 1.5)
-                                                          : Border.all(color: AppColors.surfaceHigh, width: 1),
-                                                    ),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Text(
-                                                          chunk.reading,
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .bodyMedium
-                                                              ?.copyWith(color: AppColors.primary),
-                                                        ),
-                                                        const SizedBox(height: 4),
-                                                        Text(
-                                                          chunk.surface,
-                                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                                color: AppColors.textPrimary,
-                                                                fontSize: 24,
-                                                                fontWeight: FontWeight.w600,
-                                                              ),
-                                                        ),
-                                                        const SizedBox(height: 4),
-                                                        Text(
-                                                          chunk.meaning.id,
-                                                          textAlign: TextAlign.center,
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .bodyMedium
-                                                              ?.copyWith(color: AppColors.textMuted),
-                                                        ),
-                                                      ],
-                                                    ),
+
+                                                      return Column(
+                                                        children: [
+                                                          Text(
+                                                            chunk.reading,
+                                                            style: Theme.of(context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(color: AppColors.primary),
+                                                          ),
+                                                          const SizedBox(height: 4),
+                                                          Text(
+                                                            chunk.surface,
+                                                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                                  color: AppColors.textPrimary,
+                                                                  fontSize: 24,
+                                                                  fontWeight: FontWeight.w600,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }).toList(),
                                                   ),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ],
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    lyric.translation.id,
+                                                    textAlign: TextAlign.center,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.copyWith(color: AppColors.textMuted),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 20),
+                                              Wrap(
+                                                spacing: 12,
+                                                runSpacing: 12,
+                                                alignment: WrapAlignment.center,
+                                                children: lyric.chunks.where((chunk) => chunk.isKeyword).map((chunk) {
+                                                  final isSaved = savedSurfaces.contains(chunk.surface);
+                                                  return GestureDetector(
+                                                    onTap: () async {
+                                                      HapticFeedback.lightImpact();
+
+                                                      if (isSaved) {
+                                                        final entities = await ref
+                                                            .read(savedKeywordRepositoryProvider)
+                                                            .getBySurface(chunk.surface);
+
+                                                        if (entities != null) {
+                                                          await ref
+                                                              .read(savedKeywordRepositoryProvider)
+                                                              .deleteKeyword(entities.id);
+                                                        }
+                                                      } else {
+                                                        await ref.read(savedKeywordRepositoryProvider).saveKeyword(
+                                                              SavedKeyword(
+                                                                id: 0,
+                                                                surface: chunk.surface,
+                                                                reading: chunk.reading,
+                                                                meaningEn: chunk.meaning.en,
+                                                                meaningId: chunk.meaning.id,
+                                                                songLyricId: song!.isarId,
+                                                                songTitle: song.metadata.title,
+                                                                language: song.metadata.scriptLanguage,
+                                                                savedAt: DateTime.now(),
+                                                              ),
+                                                            );
+                                                      }
+                                                      ref.invalidate(savedKeywordsProvider(surfaceKey));
+                                                    },
+                                                    child: AnimatedContainer(
+                                                      duration: const Duration(milliseconds: 200),
+                                                      curve: Curves.bounceInOut,
+                                                      padding: const EdgeInsets.all(12),
+                                                      decoration: BoxDecoration(
+                                                        color: AppColors.surface,
+                                                        borderRadius: BorderRadius.circular(16),
+                                                        border: isSaved
+                                                            ? Border.all(color: AppColors.primary, width: 1.5)
+                                                            : Border.all(color: AppColors.surfaceHigh, width: 1),
+                                                      ),
+                                                      child: Column(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Text(
+                                                            chunk.reading,
+                                                            style: Theme.of(context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(color: AppColors.primary),
+                                                          ),
+                                                          const SizedBox(height: 4),
+                                                          Text(
+                                                            chunk.surface,
+                                                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                                  color: AppColors.textPrimary,
+                                                                  fontSize: 24,
+                                                                  fontWeight: FontWeight.w600,
+                                                                ),
+                                                          ),
+                                                          const SizedBox(height: 4),
+                                                          Text(
+                                                            language == AppLanguage.en
+                                                                ? chunk.meaning.en
+                                                                : chunk.meaning.id,
+                                                            textAlign: TextAlign.center,
+                                                            style: Theme.of(context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(color: AppColors.textMuted),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                }).toList(),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       );
                                     });
@@ -330,7 +601,7 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
                               return GestureDetector(
                                 onTapUp: (details) {
                                   HapticFeedback.lightImpact();
-                                  _showChunkPopUp(context, chunk, details.globalPosition);
+                                  _showChunkPopUp(context, chunk, details.globalPosition, language);
                                 },
                                 child: Column(
                                   children: [
@@ -372,7 +643,7 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
     );
   }
 
-  void _showChunkPopUp(BuildContext context, Chunk chunk, Offset position) {
+  void _showChunkPopUp(BuildContext context, Chunk chunk, Offset position, AppLanguage language) {
     _overlayEntry?.remove();
     _menuTimer?.cancel();
 
@@ -410,7 +681,8 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
               children: [
                 Text(chunk.reading, style: TextStyle(color: AppColors.primary)),
                 Text(chunk.surface, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
-                Text(chunk.meaning.id, style: TextStyle(color: AppColors.textMuted)),
+                Text(language == AppLanguage.en ? chunk.meaning.en : chunk.meaning.id,
+                    style: TextStyle(color: AppColors.textMuted)),
               ],
             ),
           ),

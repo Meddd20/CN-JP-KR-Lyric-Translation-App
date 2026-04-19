@@ -1,6 +1,6 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/models/global_glossary.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/lyric.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/metadata.dart';
+import 'package:Versalex/core/models/global_glossary.dart';
+import 'package:Versalex/core/models/lyric.dart';
+import 'package:Versalex/core/models/metadata.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'song_lyric.freezed.dart';
@@ -12,7 +12,7 @@ abstract class SongLyric with _$SongLyric {
     @Default(0) int isarId,
     required String youtubeURL,
     required Metadata metadata,
-    required List<GlobalGlossary> globalGlossary,
+    @JsonKey(name: 'global_glossary', defaultValue: []) required List<GlobalGlossary> globalGlossary,
     required List<Lyric> lyrics,
     required DateTime createdAt,
   }) = _SongLyric;

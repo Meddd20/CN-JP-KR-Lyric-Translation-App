@@ -1,4 +1,4 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
 import 'package:flutter/animation.dart';
 
 import '../enums/difficulty.dart';

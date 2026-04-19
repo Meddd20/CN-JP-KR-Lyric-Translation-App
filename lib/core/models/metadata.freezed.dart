@@ -16,6 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$Metadata {
   String get title;
   String get artist;
+  @JsonKey(name: 'script_language')
   ScriptLanguage get scriptLanguage;
   Difficulty get difficulty;
   List<String> get tags;
@@ -63,7 +64,7 @@ abstract mixin class $MetadataCopyWith<$Res> {
   $Res call(
       {String title,
       String artist,
-      ScriptLanguage scriptLanguage,
+      @JsonKey(name: 'script_language') ScriptLanguage scriptLanguage,
       Difficulty difficulty,
       List<String> tags});
 }
@@ -204,8 +205,12 @@ extension MetadataPatterns on Metadata {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String title, String artist, ScriptLanguage scriptLanguage,
-            Difficulty difficulty, List<String> tags)?
+    TResult Function(
+            String title,
+            String artist,
+            @JsonKey(name: 'script_language') ScriptLanguage scriptLanguage,
+            Difficulty difficulty,
+            List<String> tags)?
         $default, {
     required TResult orElse(),
   }) {
@@ -234,8 +239,12 @@ extension MetadataPatterns on Metadata {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String title, String artist, ScriptLanguage scriptLanguage,
-            Difficulty difficulty, List<String> tags)
+    TResult Function(
+            String title,
+            String artist,
+            @JsonKey(name: 'script_language') ScriptLanguage scriptLanguage,
+            Difficulty difficulty,
+            List<String> tags)
         $default,
   ) {
     final _that = this;
@@ -265,7 +274,7 @@ extension MetadataPatterns on Metadata {
     TResult? Function(
             String title,
             String artist,
-            ScriptLanguage scriptLanguage,
+            @JsonKey(name: 'script_language') ScriptLanguage scriptLanguage,
             Difficulty difficulty,
             List<String> tags)?
         $default,
@@ -287,7 +296,7 @@ class _Metadata implements Metadata {
   const _Metadata(
       {required this.title,
       required this.artist,
-      required this.scriptLanguage,
+      @JsonKey(name: 'script_language') required this.scriptLanguage,
       required this.difficulty,
       required final List<String> tags})
       : _tags = tags;
@@ -299,6 +308,7 @@ class _Metadata implements Metadata {
   @override
   final String artist;
   @override
+  @JsonKey(name: 'script_language')
   final ScriptLanguage scriptLanguage;
   @override
   final Difficulty difficulty;
@@ -360,7 +370,7 @@ abstract mixin class _$MetadataCopyWith<$Res>
   $Res call(
       {String title,
       String artist,
-      ScriptLanguage scriptLanguage,
+      @JsonKey(name: 'script_language') ScriptLanguage scriptLanguage,
       Difficulty difficulty,
       List<String> tags});
 }

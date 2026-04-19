@@ -41,7 +41,7 @@ final class LyricNotifierProvider
   }
 }
 
-String _$lyricNotifierHash() => r'2e31faffe88dc7f8c134565a608eacbd606e12dd';
+String _$lyricNotifierHash() => r'd809a8aae9b33cf8ec970c7a26a79eb8f3d600d9';
 
 abstract class _$LyricNotifier extends $Notifier<AsyncValue<SongLyric?>> {
   AsyncValue<SongLyric?> build();

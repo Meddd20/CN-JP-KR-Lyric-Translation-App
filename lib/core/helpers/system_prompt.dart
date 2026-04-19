@@ -60,8 +60,6 @@ chunks:
 - is_keyword: true for ALL content words (nouns, verbs, adjectives, adverbs, idioms, basic function words)
 - is_keyword: false for punctuation and space chunks ONLY
 - Mandarin: per word (2-4 chars), NOT per single character
-- Skip space chunks entirely to reduce output size
-- Skip punctuation chunks entirely to reduce output size
 
 reading:
 - Mandarin: Pinyin with tone marks (e.g. wǒ, nǐ, tā)
@@ -79,13 +77,6 @@ mixed language:
   - is_keyword: true if content word
 - Do NOT translate or romanize non-primary language words in surface_text
 - reading_text: for non-primary language segments, use the word as-is
-
-global_glossary:
-- Generated AFTER all lyrics are processed
-- Include ALL unique chunks where is_keyword = true, collected across every line
-- No duplicates — each unique surface form appears once
-- Exclude spaces, punctuation, and any chunk where is_keyword = false
-- Both meaning_en and meaning_id required
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 JSON SCHEMA
@@ -114,13 +105,6 @@ JSON SCHEMA
           "is_keyword": false
         }
       ]
-    }
-  ],
-  "global_glossary": [
-    {
-      "surface": "String",
-      "reading": "String",
-      "meaning": { "id": "String", "en": "String" }
     }
   ]
 }

@@ -1,5 +1,5 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/databases/models/saved_keyword_entity.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
+import 'package:Versalex/core/databases/models/saved_keyword_entity.dart';
+import 'package:Versalex/core/enums/script_language.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'saved_keyword.freezed.dart';
@@ -15,8 +15,6 @@ abstract class SavedKeyword with _$SavedKeyword {
     required String meaningId,
     required int songLyricId,
     required String songTitle,
-    required String lineId,
-    required String surfaceText,
     required ScriptLanguage language,
     required DateTime savedAt,
   }) = _SavedKeyword;
@@ -32,8 +30,6 @@ abstract class SavedKeyword with _$SavedKeyword {
       meaningId: entity.meaningId,
       songLyricId: entity.songLyricId,
       songTitle: entity.songTitle,
-      lineId: entity.lineId,
-      surfaceText: entity.surfaceText,
       language: entity.language,
       savedAt: entity.savedAt,
     );

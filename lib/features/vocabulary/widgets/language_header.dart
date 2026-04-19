@@ -1,16 +1,18 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class LanguageHeader extends StatelessWidget {
   final String language;
   final Color languageColor;
   final void Function() navigateVocabDetail;
+  final String viewAllLabel;
 
   const LanguageHeader({
     super.key,
     required this.language,
     required this.languageColor,
     required this.navigateVocabDetail,
+    this.viewAllLabel = 'View All',
   });
 
   @override
@@ -36,7 +38,7 @@ class LanguageHeader extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                "View All",
+                viewAllLabel,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
               ),
               const SizedBox(width: 4),

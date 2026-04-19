@@ -21,8 +21,6 @@ mixin _$SavedKeyword {
   String get meaningId;
   int get songLyricId;
   String get songTitle;
-  String get lineId;
-  String get surfaceText;
   ScriptLanguage get language;
   DateTime get savedAt;
 
@@ -53,9 +51,6 @@ mixin _$SavedKeyword {
                 other.songLyricId == songLyricId) &&
             (identical(other.songTitle, songTitle) ||
                 other.songTitle == songTitle) &&
-            (identical(other.lineId, lineId) || other.lineId == lineId) &&
-            (identical(other.surfaceText, surfaceText) ||
-                other.surfaceText == surfaceText) &&
             (identical(other.language, language) ||
                 other.language == language) &&
             (identical(other.savedAt, savedAt) || other.savedAt == savedAt));
@@ -63,23 +58,12 @@ mixin _$SavedKeyword {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      surface,
-      reading,
-      meaningEn,
-      meaningId,
-      songLyricId,
-      songTitle,
-      lineId,
-      surfaceText,
-      language,
-      savedAt);
+  int get hashCode => Object.hash(runtimeType, id, surface, reading, meaningEn,
+      meaningId, songLyricId, songTitle, language, savedAt);
 
   @override
   String toString() {
-    return 'SavedKeyword(id: $id, surface: $surface, reading: $reading, meaningEn: $meaningEn, meaningId: $meaningId, songLyricId: $songLyricId, songTitle: $songTitle, lineId: $lineId, surfaceText: $surfaceText, language: $language, savedAt: $savedAt)';
+    return 'SavedKeyword(id: $id, surface: $surface, reading: $reading, meaningEn: $meaningEn, meaningId: $meaningId, songLyricId: $songLyricId, songTitle: $songTitle, language: $language, savedAt: $savedAt)';
   }
 }
 
@@ -97,8 +81,6 @@ abstract mixin class $SavedKeywordCopyWith<$Res> {
       String meaningId,
       int songLyricId,
       String songTitle,
-      String lineId,
-      String surfaceText,
       ScriptLanguage language,
       DateTime savedAt});
 }
@@ -122,8 +104,6 @@ class _$SavedKeywordCopyWithImpl<$Res> implements $SavedKeywordCopyWith<$Res> {
     Object? meaningId = null,
     Object? songLyricId = null,
     Object? songTitle = null,
-    Object? lineId = null,
-    Object? surfaceText = null,
     Object? language = null,
     Object? savedAt = null,
   }) {
@@ -155,14 +135,6 @@ class _$SavedKeywordCopyWithImpl<$Res> implements $SavedKeywordCopyWith<$Res> {
       songTitle: null == songTitle
           ? _self.songTitle
           : songTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      lineId: null == lineId
-          ? _self.lineId
-          : lineId // ignore: cast_nullable_to_non_nullable
-              as String,
-      surfaceText: null == surfaceText
-          ? _self.surfaceText
-          : surfaceText // ignore: cast_nullable_to_non_nullable
               as String,
       language: null == language
           ? _self.language
@@ -277,8 +249,6 @@ extension SavedKeywordPatterns on SavedKeyword {
             String meaningId,
             int songLyricId,
             String songTitle,
-            String lineId,
-            String surfaceText,
             ScriptLanguage language,
             DateTime savedAt)?
         $default, {
@@ -295,8 +265,6 @@ extension SavedKeywordPatterns on SavedKeyword {
             _that.meaningId,
             _that.songLyricId,
             _that.songTitle,
-            _that.lineId,
-            _that.surfaceText,
             _that.language,
             _that.savedAt);
       case _:
@@ -327,8 +295,6 @@ extension SavedKeywordPatterns on SavedKeyword {
             String meaningId,
             int songLyricId,
             String songTitle,
-            String lineId,
-            String surfaceText,
             ScriptLanguage language,
             DateTime savedAt)
         $default,
@@ -344,8 +310,6 @@ extension SavedKeywordPatterns on SavedKeyword {
             _that.meaningId,
             _that.songLyricId,
             _that.songTitle,
-            _that.lineId,
-            _that.surfaceText,
             _that.language,
             _that.savedAt);
       case _:
@@ -375,8 +339,6 @@ extension SavedKeywordPatterns on SavedKeyword {
             String meaningId,
             int songLyricId,
             String songTitle,
-            String lineId,
-            String surfaceText,
             ScriptLanguage language,
             DateTime savedAt)?
         $default,
@@ -392,8 +354,6 @@ extension SavedKeywordPatterns on SavedKeyword {
             _that.meaningId,
             _that.songLyricId,
             _that.songTitle,
-            _that.lineId,
-            _that.surfaceText,
             _that.language,
             _that.savedAt);
       case _:
@@ -413,8 +373,6 @@ class _SavedKeyword implements SavedKeyword {
       required this.meaningId,
       required this.songLyricId,
       required this.songTitle,
-      required this.lineId,
-      required this.surfaceText,
       required this.language,
       required this.savedAt});
   factory _SavedKeyword.fromJson(Map<String, dynamic> json) =>
@@ -434,10 +392,6 @@ class _SavedKeyword implements SavedKeyword {
   final int songLyricId;
   @override
   final String songTitle;
-  @override
-  final String lineId;
-  @override
-  final String surfaceText;
   @override
   final ScriptLanguage language;
   @override
@@ -474,9 +428,6 @@ class _SavedKeyword implements SavedKeyword {
                 other.songLyricId == songLyricId) &&
             (identical(other.songTitle, songTitle) ||
                 other.songTitle == songTitle) &&
-            (identical(other.lineId, lineId) || other.lineId == lineId) &&
-            (identical(other.surfaceText, surfaceText) ||
-                other.surfaceText == surfaceText) &&
             (identical(other.language, language) ||
                 other.language == language) &&
             (identical(other.savedAt, savedAt) || other.savedAt == savedAt));
@@ -484,23 +435,12 @@ class _SavedKeyword implements SavedKeyword {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      surface,
-      reading,
-      meaningEn,
-      meaningId,
-      songLyricId,
-      songTitle,
-      lineId,
-      surfaceText,
-      language,
-      savedAt);
+  int get hashCode => Object.hash(runtimeType, id, surface, reading, meaningEn,
+      meaningId, songLyricId, songTitle, language, savedAt);
 
   @override
   String toString() {
-    return 'SavedKeyword(id: $id, surface: $surface, reading: $reading, meaningEn: $meaningEn, meaningId: $meaningId, songLyricId: $songLyricId, songTitle: $songTitle, lineId: $lineId, surfaceText: $surfaceText, language: $language, savedAt: $savedAt)';
+    return 'SavedKeyword(id: $id, surface: $surface, reading: $reading, meaningEn: $meaningEn, meaningId: $meaningId, songLyricId: $songLyricId, songTitle: $songTitle, language: $language, savedAt: $savedAt)';
   }
 }
 
@@ -520,8 +460,6 @@ abstract mixin class _$SavedKeywordCopyWith<$Res>
       String meaningId,
       int songLyricId,
       String songTitle,
-      String lineId,
-      String surfaceText,
       ScriptLanguage language,
       DateTime savedAt});
 }
@@ -546,8 +484,6 @@ class __$SavedKeywordCopyWithImpl<$Res>
     Object? meaningId = null,
     Object? songLyricId = null,
     Object? songTitle = null,
-    Object? lineId = null,
-    Object? surfaceText = null,
     Object? language = null,
     Object? savedAt = null,
   }) {
@@ -579,14 +515,6 @@ class __$SavedKeywordCopyWithImpl<$Res>
       songTitle: null == songTitle
           ? _self.songTitle
           : songTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      lineId: null == lineId
-          ? _self.lineId
-          : lineId // ignore: cast_nullable_to_non_nullable
-              as String,
-      surfaceText: null == surfaceText
-          ? _self.surfaceText
-          : surfaceText // ignore: cast_nullable_to_non_nullable
               as String,
       language: null == language
           ? _self.language

@@ -1,10 +1,10 @@
+import 'package:Versalex/core/widgets/difficulty_chip.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/difficulty.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/difficulty_color.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/get_youtube_id.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/language_flag.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:Versalex/core/enums/difficulty.dart';
+import 'package:Versalex/core/enums/script_language.dart';
+import 'package:Versalex/core/helpers/get_youtube_id.dart';
+import 'package:Versalex/core/helpers/language_flag.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class TrackCard extends StatelessWidget {
@@ -114,26 +114,18 @@ class TrackCard extends StatelessWidget {
                   Text(
                     title,
                     style: Theme.of(context).textTheme.titleLarge,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     artist,
                     style: Theme.of(context).textTheme.bodyMedium,
                     textAlign: TextAlign.left,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 20),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    decoration:
-                        BoxDecoration(color: difficultyColor(difficulty), borderRadius: BorderRadius.circular(12)),
-                    child: Text(
-                      difficulty.name.toUpperCase(),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.textPrimary,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                  )
+                  DifficultyChip(difficulty: difficulty),
                 ],
               ),
             ),

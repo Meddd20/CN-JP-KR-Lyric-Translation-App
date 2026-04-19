@@ -17,6 +17,7 @@ mixin _$SongLyric {
   int get isarId;
   String get youtubeURL;
   Metadata get metadata;
+  @JsonKey(name: 'global_glossary', defaultValue: [])
   List<GlobalGlossary> get globalGlossary;
   List<Lyric> get lyrics;
   DateTime get createdAt;
@@ -74,6 +75,7 @@ abstract mixin class $SongLyricCopyWith<$Res> {
       {int isarId,
       String youtubeURL,
       Metadata metadata,
+      @JsonKey(name: 'global_glossary', defaultValue: [])
       List<GlobalGlossary> globalGlossary,
       List<Lyric> lyrics,
       DateTime createdAt});
@@ -236,6 +238,7 @@ extension SongLyricPatterns on SongLyric {
             int isarId,
             String youtubeURL,
             Metadata metadata,
+            @JsonKey(name: 'global_glossary', defaultValue: [])
             List<GlobalGlossary> globalGlossary,
             List<Lyric> lyrics,
             DateTime createdAt)?
@@ -271,6 +274,7 @@ extension SongLyricPatterns on SongLyric {
             int isarId,
             String youtubeURL,
             Metadata metadata,
+            @JsonKey(name: 'global_glossary', defaultValue: [])
             List<GlobalGlossary> globalGlossary,
             List<Lyric> lyrics,
             DateTime createdAt)
@@ -304,6 +308,7 @@ extension SongLyricPatterns on SongLyric {
             int isarId,
             String youtubeURL,
             Metadata metadata,
+            @JsonKey(name: 'global_glossary', defaultValue: [])
             List<GlobalGlossary> globalGlossary,
             List<Lyric> lyrics,
             DateTime createdAt)?
@@ -327,6 +332,7 @@ class _SongLyric implements SongLyric {
       {this.isarId = 0,
       required this.youtubeURL,
       required this.metadata,
+      @JsonKey(name: 'global_glossary', defaultValue: [])
       required final List<GlobalGlossary> globalGlossary,
       required final List<Lyric> lyrics,
       required this.createdAt})
@@ -344,6 +350,7 @@ class _SongLyric implements SongLyric {
   final Metadata metadata;
   final List<GlobalGlossary> _globalGlossary;
   @override
+  @JsonKey(name: 'global_glossary', defaultValue: [])
   List<GlobalGlossary> get globalGlossary {
     if (_globalGlossary is EqualUnmodifiableListView) return _globalGlossary;
     // ignore: implicit_dynamic_type
@@ -422,6 +429,7 @@ abstract mixin class _$SongLyricCopyWith<$Res>
       {int isarId,
       String youtubeURL,
       Metadata metadata,
+      @JsonKey(name: 'global_glossary', defaultValue: [])
       List<GlobalGlossary> globalGlossary,
       List<Lyric> lyrics,
       DateTime createdAt});

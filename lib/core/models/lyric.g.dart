@@ -7,11 +7,11 @@ part of 'lyric.dart';
 // **************************************************************************
 
 _Lyric _$LyricFromJson(Map<String, dynamic> json) => _Lyric(
-      lineId: json['lineId'] as String,
-      startTime: (json['startTime'] as num).toDouble(),
-      endTime: (json['endTime'] as num).toDouble(),
-      surfaceText: json['surfaceText'] as String,
-      readingText: json['readingText'] as String,
+      lineId: json['line_id'] as String,
+      startTime: (json['start_time'] as num).toDouble(),
+      endTime: (json['end_time'] as num).toDouble(),
+      surfaceText: json['surface_text'] as String,
+      readingText: json['reading_text'] as String,
       translation:
           Meaning.fromJson(json['translation'] as Map<String, dynamic>),
       chunks: (json['chunks'] as List<dynamic>)
@@ -20,11 +20,11 @@ _Lyric _$LyricFromJson(Map<String, dynamic> json) => _Lyric(
     );
 
 Map<String, dynamic> _$LyricToJson(_Lyric instance) => <String, dynamic>{
-      'lineId': instance.lineId,
-      'startTime': instance.startTime,
-      'endTime': instance.endTime,
-      'surfaceText': instance.surfaceText,
-      'readingText': instance.readingText,
+      'line_id': instance.lineId,
+      'start_time': instance.startTime,
+      'end_time': instance.endTime,
+      'surface_text': instance.surfaceText,
+      'reading_text': instance.readingText,
       'translation': instance.translation,
       'chunks': instance.chunks,
     };

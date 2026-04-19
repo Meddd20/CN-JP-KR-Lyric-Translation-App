@@ -1,11 +1,11 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/song_lyric.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/router/main_shell.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/history_page.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/home_page.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/lyric_detail_page.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/vocabulary/vocabulary_detail_page.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/vocabulary/vocabulary_page.dart';
+import 'package:Versalex/core/enums/script_language.dart';
+import 'package:Versalex/core/models/song_lyric.dart';
+import 'package:Versalex/core/router/main_shell.dart';
+import 'package:Versalex/features/lyric/ui/history_page.dart';
+import 'package:Versalex/features/lyric/ui/home_page.dart';
+import 'package:Versalex/features/lyric/ui/lyric_detail_page.dart';
+import 'package:Versalex/features/vocabulary/vocabulary_detail_page.dart';
+import 'package:Versalex/features/vocabulary/vocabulary_page.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouter = GoRouter(
@@ -29,19 +29,19 @@ final appRouter = GoRouter(
       ],
     ),
     GoRoute(
+      path: '/lyric/detail',
+      builder: (context, state) {
+        final lyric = state.extra as SongLyric?;
+        return LyricDetailPage(songLyric: lyric);
+      },
+    ),
+    GoRoute(
       path: '/lyric/:id',
       builder: (context, state) {
         final id = state.pathParameters['id']!;
         return LyricDetailPage(
           lyricId: id,
         );
-      },
-    ),
-    GoRoute(
-      path: '/lyric/detail',
-      builder: (context, state) {
-        final lyric = state.extra as SongLyric?;
-        return LyricDetailPage(songLyric: lyric);
       },
     ),
     GoRoute(

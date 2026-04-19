@@ -1,5 +1,5 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/models/song_lyric.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/repositories/lyric_repository.dart';
+import 'package:Versalex/core/models/song_lyric.dart';
+import 'package:Versalex/core/repositories/lyric_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'lyric_notifier.g.dart';
@@ -23,5 +23,9 @@ class LyricNotifier extends _$LyricNotifier {
 
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => ref.read(lyricRepositoryProvider).getLyric(youtubeURL));
+
+    if (state.hasValue) {
+      ref.invalidate(recentHistoryProvider);
+    }
   }
 }

@@ -17,6 +17,7 @@ mixin _$Chunk {
   String get surface;
   String get reading;
   Meaning get meaning;
+  @JsonKey(name: 'is_keyword')
   bool get isKeyword;
 
   /// Create a copy of Chunk
@@ -57,7 +58,11 @@ abstract mixin class $ChunkCopyWith<$Res> {
   factory $ChunkCopyWith(Chunk value, $Res Function(Chunk) _then) =
       _$ChunkCopyWithImpl;
   @useResult
-  $Res call({String surface, String reading, Meaning meaning, bool isKeyword});
+  $Res call(
+      {String surface,
+      String reading,
+      Meaning meaning,
+      @JsonKey(name: 'is_keyword') bool isKeyword});
 
   $MeaningCopyWith<$Res> get meaning;
 }
@@ -203,8 +208,8 @@ extension ChunkPatterns on Chunk {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            String surface, String reading, Meaning meaning, bool isKeyword)?
+    TResult Function(String surface, String reading, Meaning meaning,
+            @JsonKey(name: 'is_keyword') bool isKeyword)?
         $default, {
     required TResult orElse(),
   }) {
@@ -233,8 +238,8 @@ extension ChunkPatterns on Chunk {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(
-            String surface, String reading, Meaning meaning, bool isKeyword)
+    TResult Function(String surface, String reading, Meaning meaning,
+            @JsonKey(name: 'is_keyword') bool isKeyword)
         $default,
   ) {
     final _that = this;
@@ -261,8 +266,8 @@ extension ChunkPatterns on Chunk {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(
-            String surface, String reading, Meaning meaning, bool isKeyword)?
+    TResult? Function(String surface, String reading, Meaning meaning,
+            @JsonKey(name: 'is_keyword') bool isKeyword)?
         $default,
   ) {
     final _that = this;
@@ -283,7 +288,7 @@ class _Chunk implements Chunk {
       {required this.surface,
       required this.reading,
       required this.meaning,
-      required this.isKeyword});
+      @JsonKey(name: 'is_keyword') required this.isKeyword});
   factory _Chunk.fromJson(Map<String, dynamic> json) => _$ChunkFromJson(json);
 
   @override
@@ -293,6 +298,7 @@ class _Chunk implements Chunk {
   @override
   final Meaning meaning;
   @override
+  @JsonKey(name: 'is_keyword')
   final bool isKeyword;
 
   /// Create a copy of Chunk
@@ -339,7 +345,11 @@ abstract mixin class _$ChunkCopyWith<$Res> implements $ChunkCopyWith<$Res> {
       __$ChunkCopyWithImpl;
   @override
   @useResult
-  $Res call({String surface, String reading, Meaning meaning, bool isKeyword});
+  $Res call(
+      {String surface,
+      String reading,
+      Meaning meaning,
+      @JsonKey(name: 'is_keyword') bool isKeyword});
 
   @override
   $MeaningCopyWith<$Res> get meaning;

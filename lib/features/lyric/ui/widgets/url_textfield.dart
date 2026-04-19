@@ -1,16 +1,18 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class UrlTextfield extends StatelessWidget {
   final TextEditingController urlController;
   final void Function() suffixIconOnpressed;
   final bool isEmpty;
+  final String hintText;
 
   const UrlTextfield({
     super.key,
     required this.urlController,
     required this.suffixIconOnpressed,
     required this.isEmpty,
+    this.hintText = 'https://youtube.com/watch?v=...',
   });
 
   @override
@@ -19,7 +21,7 @@ class UrlTextfield extends StatelessWidget {
       controller: urlController,
       style: const TextStyle(color: AppColors.textPrimary),
       decoration: InputDecoration(
-        hintText: 'https://youtube.com/watch?v=...',
+        hintText: hintText,
         hintStyle: const TextStyle(
           color: AppColors.textMuted,
           fontSize: 13,

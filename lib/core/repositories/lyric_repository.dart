@@ -1,10 +1,12 @@
 import 'dart:convert';
 
-import 'package:cnjpkr_song_lyric_trnslt/core/databases/isar_provider.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/databases/models/song_lyric_entity.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/song_lyric.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/services/gemini_services.dart';
+import 'package:Versalex/core/databases/isar_provider.dart';
+import 'package:Versalex/core/databases/models/saved_keyword_entity.dart';
+import 'package:Versalex/core/databases/models/song_lyric_entity.dart';
+import 'package:Versalex/core/enums/script_language.dart';
+import 'package:Versalex/core/helpers/reading_tone_normalize.dart';
+import 'package:Versalex/core/models/song_lyric.dart';
+import 'package:Versalex/core/services/gemini_services.dart';
 import 'package:isar_community/isar.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -56,18 +58,22 @@ class LyricRepository {
   Future<List<SongLyric>> getSongsTitleArtist(String query) async {
     if (query.isEmpty) return [];
 
-    final entities = await _isar.songLyricEntitys
-        .filter()
-        .titleContains(query, caseSensitive: false)
-        .or()
-        .artistContains(query, caseSensitive: false)
-        .findAll();
+    final normalizedQuery = stripToneMarks(query.toLowerCase());
+    final all = await _isar.songLyricEntitys.where().findAll();
 
-    return entities.map(_entityToLyric).toList();
+    return all
+        .where((k) {
+          final normalizedTitle = stripToneMarks(k.title.toLowerCase());
+          final normalizedArtist = stripToneMarks(k.artist.toLowerCase());
+          return normalizedTitle.contains(normalizedQuery) || normalizedArtist.contains(normalizedQuery);
+        })
+        .map(_entityToLyric)
+        .toList();
   }
 
   Future<SongLyric?> getById(int id) async {
     final entity = await _isar.songLyricEntitys.get(id);
+    print("=== rawJson: ${entity?.rawJson.substring(0, 100)} ===");
 
     if (entity == null) return null;
 
@@ -77,6 +83,8 @@ class LyricRepository {
 
   Future<void> delete(int id) async {
     await _isar.writeTxn(() async {
+      await _isar.savedKeywordEntitys.filter().songLyricIdEqualTo(id).deleteAll();
+
       await _isar.songLyricEntitys.delete(id);
     });
   }
@@ -94,7 +102,7 @@ LyricRepository lyricRepository(Ref ref) {
 
 @riverpod
 Future<List<SongLyric>> recentHistory(Ref ref) async {
-  return await ref.read(lyricRepositoryProvider).getRecentHistory();
+  return await ref.watch(lyricRepositoryProvider).getRecentHistory();
 }
 
 @riverpod

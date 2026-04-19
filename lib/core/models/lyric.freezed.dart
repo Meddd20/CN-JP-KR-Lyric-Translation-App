@@ -14,10 +14,15 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$Lyric {
+  @JsonKey(name: 'line_id')
   String get lineId;
+  @JsonKey(name: 'start_time')
   double get startTime;
+  @JsonKey(name: 'end_time')
   double get endTime;
+  @JsonKey(name: 'surface_text')
   String get surfaceText;
+  @JsonKey(name: 'reading_text')
   String get readingText;
   Meaning get translation;
   List<Chunk> get chunks;
@@ -74,11 +79,11 @@ abstract mixin class $LyricCopyWith<$Res> {
       _$LyricCopyWithImpl;
   @useResult
   $Res call(
-      {String lineId,
-      double startTime,
-      double endTime,
-      String surfaceText,
-      String readingText,
+      {@JsonKey(name: 'line_id') String lineId,
+      @JsonKey(name: 'start_time') double startTime,
+      @JsonKey(name: 'end_time') double endTime,
+      @JsonKey(name: 'surface_text') String surfaceText,
+      @JsonKey(name: 'reading_text') String readingText,
       Meaning translation,
       List<Chunk> chunks});
 
@@ -242,11 +247,11 @@ extension LyricPatterns on Lyric {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            String lineId,
-            double startTime,
-            double endTime,
-            String surfaceText,
-            String readingText,
+            @JsonKey(name: 'line_id') String lineId,
+            @JsonKey(name: 'start_time') double startTime,
+            @JsonKey(name: 'end_time') double endTime,
+            @JsonKey(name: 'surface_text') String surfaceText,
+            @JsonKey(name: 'reading_text') String readingText,
             Meaning translation,
             List<Chunk> chunks)?
         $default, {
@@ -284,11 +289,11 @@ extension LyricPatterns on Lyric {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            String lineId,
-            double startTime,
-            double endTime,
-            String surfaceText,
-            String readingText,
+            @JsonKey(name: 'line_id') String lineId,
+            @JsonKey(name: 'start_time') double startTime,
+            @JsonKey(name: 'end_time') double endTime,
+            @JsonKey(name: 'surface_text') String surfaceText,
+            @JsonKey(name: 'reading_text') String readingText,
             Meaning translation,
             List<Chunk> chunks)
         $default,
@@ -324,11 +329,11 @@ extension LyricPatterns on Lyric {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
-            String lineId,
-            double startTime,
-            double endTime,
-            String surfaceText,
-            String readingText,
+            @JsonKey(name: 'line_id') String lineId,
+            @JsonKey(name: 'start_time') double startTime,
+            @JsonKey(name: 'end_time') double endTime,
+            @JsonKey(name: 'surface_text') String surfaceText,
+            @JsonKey(name: 'reading_text') String readingText,
             Meaning translation,
             List<Chunk> chunks)?
         $default,
@@ -354,25 +359,30 @@ extension LyricPatterns on Lyric {
 @JsonSerializable()
 class _Lyric implements Lyric {
   const _Lyric(
-      {required this.lineId,
-      required this.startTime,
-      required this.endTime,
-      required this.surfaceText,
-      required this.readingText,
+      {@JsonKey(name: 'line_id') required this.lineId,
+      @JsonKey(name: 'start_time') required this.startTime,
+      @JsonKey(name: 'end_time') required this.endTime,
+      @JsonKey(name: 'surface_text') required this.surfaceText,
+      @JsonKey(name: 'reading_text') required this.readingText,
       required this.translation,
       required final List<Chunk> chunks})
       : _chunks = chunks;
   factory _Lyric.fromJson(Map<String, dynamic> json) => _$LyricFromJson(json);
 
   @override
+  @JsonKey(name: 'line_id')
   final String lineId;
   @override
+  @JsonKey(name: 'start_time')
   final double startTime;
   @override
+  @JsonKey(name: 'end_time')
   final double endTime;
   @override
+  @JsonKey(name: 'surface_text')
   final String surfaceText;
   @override
+  @JsonKey(name: 'reading_text')
   final String readingText;
   @override
   final Meaning translation;
@@ -442,11 +452,11 @@ abstract mixin class _$LyricCopyWith<$Res> implements $LyricCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String lineId,
-      double startTime,
-      double endTime,
-      String surfaceText,
-      String readingText,
+      {@JsonKey(name: 'line_id') String lineId,
+      @JsonKey(name: 'start_time') double startTime,
+      @JsonKey(name: 'end_time') double endTime,
+      @JsonKey(name: 'surface_text') String surfaceText,
+      @JsonKey(name: 'reading_text') String readingText,
       Meaning translation,
       List<Chunk> chunks});
 

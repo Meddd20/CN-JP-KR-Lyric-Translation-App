@@ -1,6 +1,6 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/language_color.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:Versalex/core/enums/script_language.dart';
+import 'package:Versalex/core/helpers/language_color.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class VocabularyCard extends StatelessWidget {
@@ -102,9 +102,13 @@ class VocabularyCard extends StatelessWidget {
                                 size: 16,
                               ),
                               const SizedBox(width: 4),
-                              Text(
-                                songReference,
-                                style: Theme.of(context).textTheme.bodySmall,
+                              Flexible(
+                                child: Text(
+                                  songReference,
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               )
                             ],
                           ),

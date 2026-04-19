@@ -1,14 +1,16 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class GenerateButton extends StatelessWidget {
   final void Function() onPressed;
   final bool isLoading;
+  final String label;
 
   const GenerateButton({
     super.key,
     required this.onPressed,
     required this.isLoading,
+    required this.label,
   });
 
   @override
@@ -45,7 +47,7 @@ class GenerateButton extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    "Generate",
+                    label,
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
           ),

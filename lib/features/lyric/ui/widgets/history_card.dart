@@ -1,13 +1,13 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/difficulty.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/date_converter.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/difficulty_color.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/get_youtube_id.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/language_flag.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
+import 'package:Versalex/core/enums/difficulty.dart';
+import 'package:Versalex/core/enums/script_language.dart';
+import 'package:Versalex/core/helpers/date_converter.dart';
+import 'package:Versalex/core/helpers/difficulty_color.dart';
+import 'package:Versalex/core/helpers/get_youtube_id.dart';
+import 'package:Versalex/core/helpers/language_flag.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class HistoryCard extends StatelessWidget {
@@ -112,10 +112,15 @@ class HistoryCard extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  title,
-                                  style: Theme.of(context).textTheme.titleLarge,
+                                Flexible(
+                                  child: Text(
+                                    title,
+                                    style: Theme.of(context).textTheme.titleLarge,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
                                 ),
+                                const SizedBox(width: 8),
                                 Text(
                                   languageFlag(language),
                                 ),

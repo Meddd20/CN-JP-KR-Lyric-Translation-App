@@ -1,9 +1,11 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/repositories/lyric_repository.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/lyric/logic/lyric_notifier.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/generate_button.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/track_card.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/lyric/ui/widgets/url_textfield.dart';
+import 'package:Versalex/core/l10n/app_localizations.dart';
+import 'package:Versalex/core/providers/language_provider.dart';
+import 'package:Versalex/core/repositories/lyric_repository.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
+import 'package:Versalex/features/lyric/logic/lyric_notifier.dart';
+import 'package:Versalex/features/lyric/ui/widgets/generate_button.dart';
+import 'package:Versalex/features/lyric/ui/widgets/track_card.dart';
+import 'package:Versalex/features/lyric/ui/widgets/url_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,7 +30,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final lyricState = ref.watch(lyricProvider);
-    final recentHistory = ref.read(recentHistoryProvider);
+    final recentHistory = ref.watch(recentHistoryProvider);
+    final language = ref.watch(languageProviderProvider);
+    final l10n = AppLocalizations(language);
 
     ref.listen(lyricProvider, (previous, next) {
       next.whenOrNull(data: (lyric) {
@@ -58,9 +62,41 @@ class _HomePageState extends ConsumerState<HomePage> {
           "",
           style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.surfaceHigh, width: 1),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.language, size: 16, color: AppColors.primary),
+                    const SizedBox(width: 6),
+                    Text(
+                      language.name.toUpperCase(),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
         centerTitle: false,
         backgroundColor: AppColors.background,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -70,11 +106,11 @@ class _HomePageState extends ConsumerState<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Transcribe your Songs",
+                l10n.transcribeYourSongs,
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 8),
-              Text("Chinese, Japanese, and Korean",
+              Text(l10n.chineseJapaneseKorean,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
               const SizedBox(height: 20),
               UrlTextfield(
@@ -95,6 +131,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SizedBox(height: 16),
               GenerateButton(
                 isLoading: lyricState.isLoading,
+                label: l10n.generate,
                 onPressed: () {
                   ref.read(lyricProvider.notifier).transcribe(_urlController.text);
                 },
@@ -112,7 +149,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Recent Sessions",
+                            l10n.recentSessions,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           TextButton(
@@ -120,7 +157,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               context.push('/history');
                             },
                             child: Text(
-                              "View All",
+                              l10n.viewAll,
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           ),

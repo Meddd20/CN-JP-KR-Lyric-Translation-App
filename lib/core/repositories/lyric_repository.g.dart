@@ -12,8 +12,8 @@ part of 'lyric_repository.dart';
 @ProviderFor(lyricRepository)
 final lyricRepositoryProvider = LyricRepositoryProvider._();
 
-final class LyricRepositoryProvider extends $FunctionalProvider<LyricRepository, LyricRepository, LyricRepository>
-    with $Provider<LyricRepository> {
+final class LyricRepositoryProvider extends $FunctionalProvider<LyricRepository,
+    LyricRepository, LyricRepository> with $Provider<LyricRepository> {
   LyricRepositoryProvider._()
       : super(
           from: null,
@@ -30,7 +30,8 @@ final class LyricRepositoryProvider extends $FunctionalProvider<LyricRepository,
 
   @$internal
   @override
-  $ProviderElement<LyricRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<LyricRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   LyricRepository create(Ref ref) {
@@ -51,8 +52,8 @@ String _$lyricRepositoryHash() => r'1a33a907122f45d861f4e63d7cb86e68391b275d';
 @ProviderFor(recentHistory)
 final recentHistoryProvider = RecentHistoryProvider._();
 
-final class RecentHistoryProvider
-    extends $FunctionalProvider<AsyncValue<List<SongLyric>>, List<SongLyric>, FutureOr<List<SongLyric>>>
+final class RecentHistoryProvider extends $FunctionalProvider<
+        AsyncValue<List<SongLyric>>, List<SongLyric>, FutureOr<List<SongLyric>>>
     with $FutureModifier<List<SongLyric>>, $FutureProvider<List<SongLyric>> {
   RecentHistoryProvider._()
       : super(
@@ -70,7 +71,9 @@ final class RecentHistoryProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<SongLyric>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<SongLyric>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<SongLyric>> create(Ref ref) {
@@ -78,15 +81,17 @@ final class RecentHistoryProvider
   }
 }
 
-String _$recentHistoryHash() => r'dac5ebb6e5b8c028553cd67bc2bd682984dd82fc';
+String _$recentHistoryHash() => r'59b7925fbb97d9b9719e20ee2d9bf68ac10965d2';
 
 @ProviderFor(getHistory)
 final getHistoryProvider = GetHistoryFamily._();
 
-final class GetHistoryProvider
-    extends $FunctionalProvider<AsyncValue<List<SongLyric>>, List<SongLyric>, FutureOr<List<SongLyric>>>
+final class GetHistoryProvider extends $FunctionalProvider<
+        AsyncValue<List<SongLyric>>, List<SongLyric>, FutureOr<List<SongLyric>>>
     with $FutureModifier<List<SongLyric>>, $FutureProvider<List<SongLyric>> {
-  GetHistoryProvider._({required GetHistoryFamily super.from, required ScriptLanguage? super.argument})
+  GetHistoryProvider._(
+      {required GetHistoryFamily super.from,
+      required ScriptLanguage? super.argument})
       : super(
           retry: null,
           name: r'getHistoryProvider',
@@ -107,7 +112,9 @@ final class GetHistoryProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<SongLyric>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<SongLyric>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<SongLyric>> create(Ref ref) {
@@ -154,10 +161,12 @@ final class GetHistoryFamily extends $Family
 @ProviderFor(songsByTitleArtist)
 final songsByTitleArtistProvider = SongsByTitleArtistFamily._();
 
-final class SongsByTitleArtistProvider
-    extends $FunctionalProvider<AsyncValue<List<SongLyric>>, List<SongLyric>, FutureOr<List<SongLyric>>>
+final class SongsByTitleArtistProvider extends $FunctionalProvider<
+        AsyncValue<List<SongLyric>>, List<SongLyric>, FutureOr<List<SongLyric>>>
     with $FutureModifier<List<SongLyric>>, $FutureProvider<List<SongLyric>> {
-  SongsByTitleArtistProvider._({required SongsByTitleArtistFamily super.from, required String super.argument})
+  SongsByTitleArtistProvider._(
+      {required SongsByTitleArtistFamily super.from,
+      required String super.argument})
       : super(
           retry: null,
           name: r'songsByTitleArtistProvider',
@@ -178,7 +187,9 @@ final class SongsByTitleArtistProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<SongLyric>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<SongLyric>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<SongLyric>> create(Ref ref) {
@@ -200,9 +211,11 @@ final class SongsByTitleArtistProvider
   }
 }
 
-String _$songsByTitleArtistHash() => r'cb533d82962d448b8087c73803d2c716c545e055';
+String _$songsByTitleArtistHash() =>
+    r'cb533d82962d448b8087c73803d2c716c545e055';
 
-final class SongsByTitleArtistFamily extends $Family with $FunctionalFamilyOverride<FutureOr<List<SongLyric>>, String> {
+final class SongsByTitleArtistFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<SongLyric>>, String> {
   SongsByTitleArtistFamily._()
       : super(
           retry: null,
@@ -224,9 +237,11 @@ final class SongsByTitleArtistFamily extends $Family with $FunctionalFamilyOverr
 @ProviderFor(songById)
 final songByIdProvider = SongByIdFamily._();
 
-final class SongByIdProvider extends $FunctionalProvider<AsyncValue<SongLyric?>, SongLyric?, FutureOr<SongLyric?>>
+final class SongByIdProvider extends $FunctionalProvider<AsyncValue<SongLyric?>,
+        SongLyric?, FutureOr<SongLyric?>>
     with $FutureModifier<SongLyric?>, $FutureProvider<SongLyric?> {
-  SongByIdProvider._({required SongByIdFamily super.from, required int super.argument})
+  SongByIdProvider._(
+      {required SongByIdFamily super.from, required int super.argument})
       : super(
           retry: null,
           name: r'songByIdProvider',
@@ -247,7 +262,8 @@ final class SongByIdProvider extends $FunctionalProvider<AsyncValue<SongLyric?>,
 
   @$internal
   @override
-  $FutureProviderElement<SongLyric?> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<SongLyric?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<SongLyric?> create(Ref ref) {
@@ -271,7 +287,8 @@ final class SongByIdProvider extends $FunctionalProvider<AsyncValue<SongLyric?>,
 
 String _$songByIdHash() => r'efbb490d8d0534a9f4fda47fef04509c67781473';
 
-final class SongByIdFamily extends $Family with $FunctionalFamilyOverride<FutureOr<SongLyric?>, int> {
+final class SongByIdFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<SongLyric?>, int> {
   SongByIdFamily._()
       : super(
           retry: null,

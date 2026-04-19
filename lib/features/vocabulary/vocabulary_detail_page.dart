@@ -1,11 +1,14 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/vocab_sort_by.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/helpers/language_color.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/saved_keyword.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/repositories/saved_keyword_repository.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/theme/app_theme.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/widgets/custom_search_bar.dart';
-import 'package:cnjpkr_song_lyric_trnslt/features/vocabulary/widgets/vocabulary_card.dart';
+import 'package:Versalex/core/enums/app_languages.dart';
+import 'package:Versalex/core/enums/script_language.dart';
+import 'package:Versalex/core/l10n/app_localizations.dart';
+import 'package:Versalex/core/enums/vocab_sort_by.dart';
+import 'package:Versalex/core/helpers/language_color.dart';
+import 'package:Versalex/core/models/saved_keyword.dart';
+import 'package:Versalex/core/providers/language_provider.dart';
+import 'package:Versalex/core/repositories/saved_keyword_repository.dart';
+import 'package:Versalex/core/theme/app_theme.dart';
+import 'package:Versalex/core/widgets/custom_search_bar.dart';
+import 'package:Versalex/features/vocabulary/widgets/vocabulary_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,6 +32,11 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
   @override
   void initState() {
     super.initState();
+
+    // Invalidate saat page pertama kali dan saat kembali
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.invalidate(keywordByLanguageProvider(widget.language, sortBy));
+    });
   }
 
   @override
@@ -39,6 +47,9 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final language = ref.watch(languageProviderProvider);
+    final l10n = AppLocalizations(language);
+
     final keywordPerLanguage = ref.watch(keywordByLanguageProvider(widget.language, sortBy));
     final keywordSearchRes = ref.watch(searchKeywordProvider(searchController.text));
 
@@ -46,6 +57,8 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         leading: GestureDetector(
           onTap: () => context.pop(),
           child: Container(
@@ -71,7 +84,7 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "COLLECTION",
+                  l10n.collectionLabel,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppColors.textMuted,
@@ -85,13 +98,13 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "Your personal collection of new words discovered and saved for later mastery.",
+                  l10n.yourPersonalCollection,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 14),
                 CustomSearchBar(
                   searchController: searchController,
-                  hintText: "Search yout vocabulary",
+                  hintText: l10n.searchYourVocabulary,
                   onChanged: (value) {
                     setState(() {});
                   },
@@ -111,11 +124,11 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Saved Words",
+                          l10n.savedWords,
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
                         ),
                         Text(
-                          "Showing ${keywordPerLanguage.value?.length ?? 0} terms",
+                          l10n.showingTerms(keywordPerLanguage.value?.length ?? 0),
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -129,20 +142,20 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
                       itemBuilder: (context) => [
                         PopupMenuItem(
                           value: VocabSortBy.latest,
-                          child: Text("Latest"),
+                          child: Text(l10n.sortLatest),
                         ),
                         PopupMenuItem(
                           value: VocabSortBy.oldest,
-                          child: Text("Oldest"),
+                          child: Text(l10n.sortOldest),
                         ),
                         PopupMenuItem(
                           value: VocabSortBy.ascending,
-                          child: Text("Ascending (A → Z)"),
+                          child: Text(l10n.sortAscending),
                         ),
                         PopupMenuItem(
                           value: VocabSortBy.descending,
-                          child: Text("Descending (Z → A)"),
-                        )
+                          child: Text(l10n.sortDescending),
+                        ),
                       ],
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -167,7 +180,9 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
                   ],
                 ),
                 const SizedBox(height: 14),
-                searchController.text.isEmpty ? _buildList(keywordPerLanguage) : _buildList(keywordSearchRes),
+                searchController.text.isEmpty
+                    ? _buildList(keywordPerLanguage, language)
+                    : _buildList(keywordSearchRes, language),
               ],
             ),
           ),
@@ -176,10 +191,11 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
     );
   }
 
-  Widget _buildList(AsyncValue<List<SavedKeyword>> asyncValue) {
+  Widget _buildList(AsyncValue<List<SavedKeyword>> asyncValue, AppLanguage language) {
+    final l10n = AppLocalizations(ref.read(languageProviderProvider));
     return asyncValue.when(
       error: (error, _) => Center(
-        child: Text("Error: $error"),
+        child: Text("${l10n.errorPrefix}$error"),
       ),
       loading: () => const Center(
         child: CircularProgressIndicator(),
@@ -187,8 +203,8 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
       data: (keywords) => keywords.isEmpty
           ? SizedBox(
               height: MediaQuery.of(context).size.height * 0.4,
-              child: const Center(
-                child: Text("No vocabulary saved yet"),
+              child: Center(
+                child: Text(l10n.noVocabSavedYet),
               ),
             )
           : ListView.builder(
@@ -220,9 +236,10 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
                       language: widget.language,
                       surface: keywords[index].surface,
                       reading: keywords[index].reading,
-                      meaning: keywords[index].meaningEn,
-                      navigateToSong: () {
-                        context.push('/lyric/${keywords[index].songLyricId}');
+                      meaning: language == AppLanguage.en ? keywords[index].meaningEn : keywords[index].meaningId,
+                      navigateToSong: () async {
+                        await context.push('/lyric/${keywords[index].songLyricId}');
+                        _invalidateAllSorts();
                       },
                       songReference: keywords[index].songTitle,
                     ),
@@ -231,5 +248,11 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
               },
             ),
     );
+  }
+
+  void _invalidateAllSorts() {
+    for (final sort in VocabSortBy.values) {
+      ref.invalidate(keywordByLanguageProvider(widget.language, sort));
+    }
   }
 }

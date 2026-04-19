@@ -1,8 +1,9 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/databases/isar_provider.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/databases/models/saved_keyword_entity.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/vocab_sort_by.dart';
-import 'package:cnjpkr_song_lyric_trnslt/core/models/saved_keyword.dart';
+import 'package:Versalex/core/databases/isar_provider.dart';
+import 'package:Versalex/core/databases/models/saved_keyword_entity.dart';
+import 'package:Versalex/core/enums/script_language.dart';
+import 'package:Versalex/core/enums/vocab_sort_by.dart';
+import 'package:Versalex/core/helpers/reading_tone_normalize.dart';
+import 'package:Versalex/core/models/saved_keyword.dart';
 import 'package:isar_community/isar.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,6 +15,10 @@ class SavedKeywordRepository {
   SavedKeywordRepository(this._isar);
 
   Future<void> saveKeyword(SavedKeyword keywords) async {
+    final existing = await getBySurface(keywords.surface);
+
+    if (existing != null) return;
+
     final entity = SavedKeywordEntity()
       ..surface = keywords.surface
       ..reading = keywords.reading
@@ -21,8 +26,6 @@ class SavedKeywordRepository {
       ..meaningId = keywords.meaningId
       ..songLyricId = keywords.songLyricId
       ..songTitle = keywords.songTitle
-      ..lineId = keywords.lineId
-      ..surfaceText = keywords.surfaceText
       ..language = keywords.language
       ..savedAt = DateTime.now();
 
@@ -41,8 +44,8 @@ class SavedKeywordRepository {
     return entities.map(SavedKeyword.fromEntity).toList();
   }
 
-  Future<SavedKeywordEntity?> getByChunk(String surface, String lineId) async {
-    return await _isar.savedKeywordEntitys.filter().surfaceEqualTo(surface).lineIdEqualTo(lineId).findFirst();
+  Future<SavedKeywordEntity?> getBySurface(String surface) async {
+    return await _isar.savedKeywordEntitys.filter().surfaceEqualTo(surface).findFirst();
   }
 
   Future<SavedKeyword?> getByKeywordBySong(int id) async {
@@ -63,18 +66,19 @@ class SavedKeywordRepository {
   Future<List<SavedKeyword>> searchKeyword(String query) async {
     if (query.isEmpty) return [];
 
-    final entities = await _isar.savedKeywordEntitys
-        .filter()
-        .readingContains(query)
-        .or()
-        .surfaceContains(query)
-        .or()
-        .meaningEnContains(query)
-        .or()
-        .meaningIdContains(query)
-        .findAll();
+    final normalizedQuery = stripToneMarks(query.toLowerCase());
+    final all = await _isar.savedKeywordEntitys.where().findAll();
 
-    return entities.map(SavedKeyword.fromEntity).toList();
+    return all
+        .where((k) {
+          final readingNormalized = stripToneMarks(k.reading.toLowerCase());
+          return readingNormalized.contains(normalizedQuery) ||
+              k.surface.contains(normalizedQuery) ||
+              k.meaningEn.toLowerCase().contains(normalizedQuery) ||
+              k.meaningId.toLowerCase().contains(normalizedQuery);
+        })
+        .map(SavedKeyword.fromEntity)
+        .toList();
   }
 
   Future<void> deleteKeyword(int id) async {

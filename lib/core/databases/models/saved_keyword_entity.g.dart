@@ -24,49 +24,39 @@ const SavedKeywordEntitySchema = CollectionSchema(
       type: IsarType.byte,
       enumMap: _SavedKeywordEntitylanguageEnumValueMap,
     ),
-    r'lineId': PropertySchema(
-      id: 1,
-      name: r'lineId',
-      type: IsarType.string,
-    ),
     r'meaningEn': PropertySchema(
-      id: 2,
+      id: 1,
       name: r'meaningEn',
       type: IsarType.string,
     ),
     r'meaningId': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'meaningId',
       type: IsarType.string,
     ),
     r'reading': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'reading',
       type: IsarType.string,
     ),
     r'savedAt': PropertySchema(
-      id: 5,
+      id: 4,
       name: r'savedAt',
       type: IsarType.dateTime,
     ),
     r'songLyricId': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'songLyricId',
       type: IsarType.long,
     ),
     r'songTitle': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'songTitle',
       type: IsarType.string,
     ),
     r'surface': PropertySchema(
-      id: 8,
+      id: 7,
       name: r'surface',
-      type: IsarType.string,
-    ),
-    r'surfaceText': PropertySchema(
-      id: 9,
-      name: r'surfaceText',
       type: IsarType.string,
     )
   },
@@ -130,13 +120,11 @@ int _savedKeywordEntityEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.lineId.length * 3;
   bytesCount += 3 + object.meaningEn.length * 3;
   bytesCount += 3 + object.meaningId.length * 3;
   bytesCount += 3 + object.reading.length * 3;
   bytesCount += 3 + object.songTitle.length * 3;
   bytesCount += 3 + object.surface.length * 3;
-  bytesCount += 3 + object.surfaceText.length * 3;
   return bytesCount;
 }
 
@@ -147,15 +135,13 @@ void _savedKeywordEntitySerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeByte(offsets[0], object.language.index);
-  writer.writeString(offsets[1], object.lineId);
-  writer.writeString(offsets[2], object.meaningEn);
-  writer.writeString(offsets[3], object.meaningId);
-  writer.writeString(offsets[4], object.reading);
-  writer.writeDateTime(offsets[5], object.savedAt);
-  writer.writeLong(offsets[6], object.songLyricId);
-  writer.writeString(offsets[7], object.songTitle);
-  writer.writeString(offsets[8], object.surface);
-  writer.writeString(offsets[9], object.surfaceText);
+  writer.writeString(offsets[1], object.meaningEn);
+  writer.writeString(offsets[2], object.meaningId);
+  writer.writeString(offsets[3], object.reading);
+  writer.writeDateTime(offsets[4], object.savedAt);
+  writer.writeLong(offsets[5], object.songLyricId);
+  writer.writeString(offsets[6], object.songTitle);
+  writer.writeString(offsets[7], object.surface);
 }
 
 SavedKeywordEntity _savedKeywordEntityDeserialize(
@@ -169,15 +155,13 @@ SavedKeywordEntity _savedKeywordEntityDeserialize(
   object.language = _SavedKeywordEntitylanguageValueEnumMap[
           reader.readByteOrNull(offsets[0])] ??
       ScriptLanguage.zh;
-  object.lineId = reader.readString(offsets[1]);
-  object.meaningEn = reader.readString(offsets[2]);
-  object.meaningId = reader.readString(offsets[3]);
-  object.reading = reader.readString(offsets[4]);
-  object.savedAt = reader.readDateTime(offsets[5]);
-  object.songLyricId = reader.readLong(offsets[6]);
-  object.songTitle = reader.readString(offsets[7]);
-  object.surface = reader.readString(offsets[8]);
-  object.surfaceText = reader.readString(offsets[9]);
+  object.meaningEn = reader.readString(offsets[1]);
+  object.meaningId = reader.readString(offsets[2]);
+  object.reading = reader.readString(offsets[3]);
+  object.savedAt = reader.readDateTime(offsets[4]);
+  object.songLyricId = reader.readLong(offsets[5]);
+  object.songTitle = reader.readString(offsets[6]);
+  object.surface = reader.readString(offsets[7]);
   return object;
 }
 
@@ -199,16 +183,12 @@ P _savedKeywordEntityDeserializeProp<P>(
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
-      return (reader.readString(offset)) as P;
-    case 5:
       return (reader.readDateTime(offset)) as P;
-    case 6:
+    case 5:
       return (reader.readLong(offset)) as P;
+    case 6:
+      return (reader.readString(offset)) as P;
     case 7:
-      return (reader.readString(offset)) as P;
-    case 8:
-      return (reader.readString(offset)) as P;
-    case 9:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -679,142 +659,6 @@ extension SavedKeywordEntityQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      lineIdEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'lineId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      lineIdGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'lineId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      lineIdLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'lineId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      lineIdBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'lineId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      lineIdStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'lineId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      lineIdEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'lineId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      lineIdContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'lineId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      lineIdMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'lineId',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      lineIdIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'lineId',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      lineIdIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'lineId',
-        value: '',
       ));
     });
   }
@@ -1610,142 +1454,6 @@ extension SavedKeywordEntityQueryFilter
       ));
     });
   }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      surfaceTextEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'surfaceText',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      surfaceTextGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'surfaceText',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      surfaceTextLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'surfaceText',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      surfaceTextBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'surfaceText',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      surfaceTextStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'surfaceText',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      surfaceTextEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'surfaceText',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      surfaceTextContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'surfaceText',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      surfaceTextMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'surfaceText',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      surfaceTextIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'surfaceText',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterFilterCondition>
-      surfaceTextIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'surfaceText',
-        value: '',
-      ));
-    });
-  }
 }
 
 extension SavedKeywordEntityQueryObject
@@ -1767,20 +1475,6 @@ extension SavedKeywordEntityQuerySortBy
       sortByLanguageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'language', Sort.desc);
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterSortBy>
-      sortByLineId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'lineId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterSortBy>
-      sortByLineIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'lineId', Sort.desc);
     });
   }
 
@@ -1881,20 +1575,6 @@ extension SavedKeywordEntityQuerySortBy
       return query.addSortBy(r'surface', Sort.desc);
     });
   }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterSortBy>
-      sortBySurfaceText() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'surfaceText', Sort.asc);
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterSortBy>
-      sortBySurfaceTextDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'surfaceText', Sort.desc);
-    });
-  }
 }
 
 extension SavedKeywordEntityQuerySortThenBy
@@ -1924,20 +1604,6 @@ extension SavedKeywordEntityQuerySortThenBy
       thenByLanguageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'language', Sort.desc);
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterSortBy>
-      thenByLineId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'lineId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterSortBy>
-      thenByLineIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'lineId', Sort.desc);
     });
   }
 
@@ -2038,20 +1704,6 @@ extension SavedKeywordEntityQuerySortThenBy
       return query.addSortBy(r'surface', Sort.desc);
     });
   }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterSortBy>
-      thenBySurfaceText() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'surfaceText', Sort.asc);
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QAfterSortBy>
-      thenBySurfaceTextDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'surfaceText', Sort.desc);
-    });
-  }
 }
 
 extension SavedKeywordEntityQueryWhereDistinct
@@ -2060,13 +1712,6 @@ extension SavedKeywordEntityQueryWhereDistinct
       distinctByLanguage() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'language');
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QDistinct>
-      distinctByLineId({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'lineId', caseSensitive: caseSensitive);
     });
   }
 
@@ -2118,13 +1763,6 @@ extension SavedKeywordEntityQueryWhereDistinct
       return query.addDistinctBy(r'surface', caseSensitive: caseSensitive);
     });
   }
-
-  QueryBuilder<SavedKeywordEntity, SavedKeywordEntity, QDistinct>
-      distinctBySurfaceText({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'surfaceText', caseSensitive: caseSensitive);
-    });
-  }
 }
 
 extension SavedKeywordEntityQueryProperty
@@ -2139,12 +1777,6 @@ extension SavedKeywordEntityQueryProperty
       languageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'language');
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, String, QQueryOperations> lineIdProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'lineId');
     });
   }
 
@@ -2192,13 +1824,6 @@ extension SavedKeywordEntityQueryProperty
   QueryBuilder<SavedKeywordEntity, String, QQueryOperations> surfaceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'surface');
-    });
-  }
-
-  QueryBuilder<SavedKeywordEntity, String, QQueryOperations>
-      surfaceTextProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'surfaceText');
     });
   }
 }

@@ -1,4 +1,4 @@
-import 'package:cnjpkr_song_lyric_trnslt/core/enums/script_language.dart';
+import 'package:Versalex/core/enums/script_language.dart';
 
 String languageFlag(ScriptLanguage lang) {
   switch (lang) {

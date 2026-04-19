@@ -10,7 +10,7 @@ _Metadata _$MetadataFromJson(Map<String, dynamic> json) => _Metadata(
       title: json['title'] as String,
       artist: json['artist'] as String,
       scriptLanguage:
-          $enumDecode(_$ScriptLanguageEnumMap, json['scriptLanguage']),
+          $enumDecode(_$ScriptLanguageEnumMap, json['script_language']),
       difficulty: $enumDecode(_$DifficultyEnumMap, json['difficulty']),
       tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
     );
@@ -18,7 +18,7 @@ _Metadata _$MetadataFromJson(Map<String, dynamic> json) => _Metadata(
 Map<String, dynamic> _$MetadataToJson(_Metadata instance) => <String, dynamic>{
       'title': instance.title,
       'artist': instance.artist,
-      'scriptLanguage': _$ScriptLanguageEnumMap[instance.scriptLanguage]!,
+      'script_language': _$ScriptLanguageEnumMap[instance.scriptLanguage]!,
       'difficulty': _$DifficultyEnumMap[instance.difficulty]!,
       'tags': instance.tags,
     };
