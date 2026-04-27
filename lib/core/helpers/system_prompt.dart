@@ -36,6 +36,12 @@ CRITICAL — OUTPUT FORMAT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 FIELD RULES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+title and artist:
+- Format: "Original (Reading)"
+- Apply reading rules based on script_language
+- e.g. Mandarin: "走了很遠的路 (Zǒu Le Hěn Yuǎn De Lù)"
+- If already Latin script, no reading needed, just use as-is
+
 timestamps:
 - start_time: use "start" from transcript snippet (Double, in seconds)
 - end_time: use "start" + "duration" from transcript snippet (Double, in seconds)

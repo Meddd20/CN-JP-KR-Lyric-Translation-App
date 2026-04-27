@@ -73,7 +73,6 @@ class LyricRepository {
 
   Future<SongLyric?> getById(int id) async {
     final entity = await _isar.songLyricEntitys.get(id);
-    print("=== rawJson: ${entity?.rawJson.substring(0, 100)} ===");
 
     if (entity == null) return null;
 

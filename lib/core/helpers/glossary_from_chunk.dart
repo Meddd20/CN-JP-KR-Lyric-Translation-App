@@ -11,6 +11,8 @@ List<GlobalGlossary> glossaryFromChunk(List<Lyric> lyrics) {
 
       if (seen.contains(chunk.surface)) continue;
 
+      if (chunk.reading == chunk.surface) continue;
+
       seen.add(chunk.surface);
       glossary.add(
         GlobalGlossary(

@@ -2,6 +2,7 @@ import 'package:Versalex/core/databases/isar_provider.dart';
 import 'package:Versalex/core/databases/models/saved_keyword_entity.dart';
 import 'package:Versalex/core/databases/models/song_lyric_entity.dart';
 import 'package:Versalex/core/router/app_router.dart';
+import 'package:Versalex/core/services/database_seeder.dart';
 import 'package:Versalex/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,7 @@ Future<void> main() async {
 
   await dotenv.load(fileName: ".env");
 
-  final prefs = await SharedPreferences.getInstance();
+  await SharedPreferences.getInstance();
 
   // Buka database Isar — kalau belum ada, Isar buat file baru
   // SongLyricEntitySchema = struktur tabel yang digenerate dari @collection
@@ -29,6 +30,8 @@ Future<void> main() async {
     [SongLyricEntitySchema, SavedKeywordEntitySchema],
     directory: dir.path,
   );
+
+  await DatabaseSeeder.seedIfEmpty(isar);
 
   runApp(
     ProviderScope(
