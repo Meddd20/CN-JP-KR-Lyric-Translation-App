@@ -42,6 +42,9 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
   int _currentLyricIndex = -1;
   bool _userScrolling = false;
 
+  bool _useYoutubePlayer = false;
+  late YoutubePlayerController _youtubePlayerController;
+
   @override
   void initState() {
     super.initState();
@@ -55,21 +58,28 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
 
   Future<void> _initPlayer() async {
     final videoId = widget.songLyric?.youtubeURL ?? widget.lyricId ?? "";
-    final url = await getYoutubeVideo(YoutubePlayer.convertUrlToId(videoId) ?? "");
+    try {
+      final url = await getYoutubeVideo(YoutubePlayer.convertUrlToId(videoId) ?? "");
 
-    _videoController = VideoPlayerController.networkUrl(Uri.parse(url));
-    await _videoController.initialize();
-    _videoController.addListener(_syncLyric);
+      _videoController = VideoPlayerController.networkUrl(Uri.parse(url));
+      await _videoController.initialize();
+      _videoController.addListener(_syncLyric);
 
-    _chewieController = ChewieController(
-      videoPlayerController: _videoController,
-      autoPlay: false,
-      allowFullScreen: false,
-      showOptions: false,
-      allowPlaybackSpeedChanging: false,
-      allowMuting: false,
-    );
-
+      _chewieController = ChewieController(
+        videoPlayerController: _videoController,
+        autoPlay: false,
+        allowFullScreen: false,
+        showOptions: false,
+        allowPlaybackSpeedChanging: false,
+        allowMuting: false,
+      );
+    } catch (_) {
+      _useYoutubePlayer = true;
+      _youtubePlayerController = YoutubePlayerController(
+        initialVideoId: videoId,
+        flags: const YoutubePlayerFlags(autoPlay: false),
+      );
+    }
     setState(() => _playerInitialized = true);
   }
 
@@ -78,9 +88,13 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
     _menuTimer?.cancel();
     _overlayEntry?.remove();
     if (_playerInitialized) {
-      _videoController.removeListener(_syncLyric);
-      _videoController.dispose();
-      _chewieController.dispose();
+      if (_useYoutubePlayer) {
+        _youtubePlayerController.dispose();
+      } else {
+        _videoController.removeListener(_syncLyric);
+        _videoController.dispose();
+        _chewieController.dispose();
+      }
     }
     super.dispose();
   }
@@ -158,10 +172,12 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
         children: [
           _isOnline
               ? _playerInitialized
-                  ? AspectRatio(
-                      aspectRatio: _videoController.value.aspectRatio,
-                      child: Chewie(controller: _chewieController),
-                    )
+                  ? _useYoutubePlayer
+                      ? YoutubePlayer(controller: _youtubePlayerController)
+                      : AspectRatio(
+                          aspectRatio: _videoController.value.aspectRatio,
+                          child: Chewie(controller: _chewieController),
+                        )
                   : Container(
                       height: 200,
                       color: AppColors.surface,
@@ -276,7 +292,7 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
                                           ),
                                         ),
                                         child: Padding(
-                                          padding: EdgeInsets.fromLTRB(24, 14, 24, 14),
+                                          padding: EdgeInsets.fromLTRB(16, 14, 16, 14),
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -316,7 +332,7 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
                                             height: 8,
                                           ),
                                           itemCount: song?.globalGlossary.length ?? 0,
-                                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                                           itemBuilder: (contxt, index) {
                                             final item = song!.globalGlossary[index];
                                             final isSaved = data.contains(item.surface);
@@ -484,9 +500,9 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
                                       width: double.infinity,
                                       child: Padding(
                                         padding: EdgeInsets.only(
-                                          left: 24,
+                                          left: 16,
                                           right: 24,
-                                          top: 24,
+                                          top: 16,
                                           bottom: MediaQuery.of(context).viewInsets.bottom + 24,
                                         ),
                                         child: Column(
@@ -547,7 +563,9 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
                                                 ),
                                                 const SizedBox(height: 4),
                                                 Text(
-                                                  lyric.translation.id,
+                                                  language == AppLanguage.en
+                                                      ? lyric.translation.en
+                                                      : lyric.translation.id,
                                                   textAlign: TextAlign.center,
                                                   style: Theme.of(context)
                                                       .textTheme
@@ -714,7 +732,7 @@ class _LyricDetailPageState extends ConsumerState<LyricDetailPage> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          lyric.translation.id,
+                          language == AppLanguage.en ? lyric.translation.en : lyric.translation.id,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textMuted),
                         ),

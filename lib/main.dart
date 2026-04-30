@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'CNJPKR',
+      title: 'Versalex',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
       routerConfig: appRouter,

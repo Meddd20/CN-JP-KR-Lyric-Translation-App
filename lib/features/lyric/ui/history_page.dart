@@ -54,7 +54,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
         onTap: () => FocusScope.of(context).unfocus(),
         behavior: HitTestBehavior.opaque,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 50, 24, 50),
+          padding: const EdgeInsets.fromLTRB(16, 50, 16, 50),
           child: Column(
             children: [
               CustomSearchBar(
@@ -163,7 +163,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                     return false;
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(top: 10.0),
                     child: RepaintBoundary(
                       child: HistoryCard(
                         youtubeURL: songs[index].youtubeURL,

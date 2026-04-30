@@ -1,3 +1,4 @@
+import 'package:Versalex/core/enums/app_languages.dart';
 import 'package:Versalex/core/l10n/app_localizations.dart';
 import 'package:Versalex/core/providers/language_provider.dart';
 import 'package:Versalex/core/repositories/lyric_repository.dart';
@@ -66,7 +67,9 @@ class _HomePageState extends ConsumerState<HomePage> {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                _showLanguagePicker();
+              },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                 decoration: BoxDecoration(
@@ -101,7 +104,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 120),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -187,6 +190,170 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _showLanguagePicker() {
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      builder: (context) {
+        return Consumer(builder: (context, ref, child) {
+          final language = ref.watch(languageProviderProvider);
+          final l10n = AppLocalizations(language);
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.textMuted.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 4, 24, 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.translationLanguage,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                    Text(
+                      l10n.chooseHowTranslationsAreShown,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textMuted,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(
+                height: 0.1,
+                color: AppColors.surfaceHigh,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildLanguageOption(
+                      context: context,
+                      ref: ref,
+                      language: AppLanguage.id,
+                      selected: language,
+                      flag: '🇮🇩',
+                      title: 'Indonesia',
+                      subtitle: 'Terjemahan dalam Bahasa Indonesia',
+                    ),
+                    const SizedBox(height: 10),
+                    _buildLanguageOption(
+                      context: context,
+                      ref: ref,
+                      language: AppLanguage.en,
+                      selected: language,
+                      flag: 'EN',
+                      title: 'English',
+                      subtitle: 'Show translations in English',
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 15),
+            ],
+          );
+        });
+      },
+    );
+  }
+
+  Widget _buildLanguageOption({
+    required BuildContext context,
+    required WidgetRef ref,
+    required AppLanguage language,
+    required AppLanguage selected,
+    required String flag,
+    required String title,
+    required String subtitle,
+  }) {
+    final isSelected = language == selected;
+    return GestureDetector(
+      onTap: () {
+        ref.read(languageProviderProvider.notifier).setLanguage(language);
+        context.pop();
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: isSelected
+              ? Border.all(color: AppColors.primary, width: 1.5)
+              : Border.all(color: AppColors.surfaceHigh, width: 1),
+        ),
+        child: Row(
+          children: [
+            // flag atau badge
+            flag.length > 2
+                ? Text(flag, style: const TextStyle(fontSize: 24))
+                : Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceHigh,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Center(
+                      child: Text(
+                        flag,
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textMuted,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isSelected ? AppColors.primary : Colors.transparent,
+                border: Border.all(
+                  color: isSelected ? AppColors.primary : AppColors.textMuted,
+                  width: 1.5,
+                ),
+              ),
+              child: isSelected ? const Icon(Icons.check, size: 12, color: Colors.white) : null,
+            ),
+          ],
         ),
       ),
     );

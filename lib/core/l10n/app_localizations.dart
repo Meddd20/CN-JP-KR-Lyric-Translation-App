@@ -20,6 +20,8 @@ class AppLocalizations {
   String get recentSessions => _t('Recent Generated', 'Baru Diproses');
   String get viewAll => _t('View All', 'Lihat Semua');
   String get generate => _t('Generate', 'Mulai');
+  String get translationLanguage => _t('Translation Language', 'Bahasa Terjemahan');
+  String get chooseHowTranslationsAreShown => _t('Choose how translations are shown', 'Pilih bagaimana terjemahan ditampilkan');
 
   // History Page
   String get searchByTitleOrArtist => _t('Search by title or artist...', 'Cari berdasarkan judul atau artis...');

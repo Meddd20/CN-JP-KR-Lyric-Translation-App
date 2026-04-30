@@ -23,7 +23,7 @@ class VocabularyPage extends ConsumerWidget {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 50, 24, 50),
+        padding: const EdgeInsets.fromLTRB(16, 50, 16, 50),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +99,7 @@ class VocabularyPage extends ConsumerWidget {
                   chineseKeywords.value?.isEmpty == true &&
                   koreanKeywords.value?.isEmpty == true)
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.65,
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

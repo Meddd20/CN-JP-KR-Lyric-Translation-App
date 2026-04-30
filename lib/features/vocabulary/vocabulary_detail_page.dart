@@ -78,7 +78,7 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
         onTap: () => FocusScope.of(context).unfocus(),
         behavior: HitTestBehavior.opaque,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,7 +161,12 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            sortBy.name.toUpperCase(),
+                            switch (sortBy) {
+                              VocabSortBy.latest => l10n.sortLatest,
+                              VocabSortBy.oldest => l10n.sortOldest,
+                              VocabSortBy.ascending => l10n.sortAscending,
+                              VocabSortBy.descending => l10n.sortDescending,
+                            },
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   color: AppColors.textMuted,
                                   fontWeight: FontWeight.w600,
@@ -202,7 +207,7 @@ class _VocabularyDetailPageState extends ConsumerState<VocabularyDetailPage> {
       ),
       data: (keywords) => keywords.isEmpty
           ? SizedBox(
-              height: MediaQuery.of(context).size.height * 0.4,
+              height: MediaQuery.of(context).size.height * 0.65,
               child: Center(
                 child: Text(l10n.noVocabSavedYet),
               ),

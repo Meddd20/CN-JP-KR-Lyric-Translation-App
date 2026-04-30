@@ -35,7 +35,7 @@ class LyricRepository {
       await _isar.songLyricEntitys.put(entity);
     });
 
-    return songLyricWithURL;
+    return songLyricWithURL.copyWith(isarId: entity.id);
   }
 
   Future<List<SongLyric>> getHistory() async {
